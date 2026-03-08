@@ -1,0 +1,18 @@
+account_id = "280250685594"
+api_gateway_id = "l91194lhci"
+cognito_domain = "accounting-copilot-280250685594"
+cognito_user_pool_client_id = "61u3hub5dftsntsh9o4tasis75"
+cognito_user_pool_id = "eu-west-1_dRl4wmfEE"
+documents_bucket_name = "accounting-copilot-documents-280250685594"
+dynamodb_table_name = "AccountingCopilot"
+lambda_execution_role_arn = "arn:aws:iam::280250685594:role/accounting-copilot-lambda-execution"
+region = "eu-west-1"
+sns_topic_arns = {
+  "approval_reminders" = "arn:aws:sns:eu-west-1:280250685594:accounting-copilot-approval-reminders"
+  "ocr_failures" = "arn:aws:sns:eu-west-1:280250685594:accounting-copilot-ocr-failures"
+  "pending_approvals" = "arn:aws:sns:eu-west-1:280250685594:accounting-copilot-pending-approvals"
+  "unmatched_transactions" = "arn:aws:sns:eu-west-1:280250685594:accounting-copilot-unmatched-transactions"
+}
+step_functions_arn = "arn:aws:states:eu-west-1:280250685594:stateMachine:accounting-copilot-document-processing"
+website_bucket_name = "accounting-copilot-web-280250685594"
+website_url = "http://accounting-copilot-web-280250685594.s3-website-eu-west-1.amazonaws.com"

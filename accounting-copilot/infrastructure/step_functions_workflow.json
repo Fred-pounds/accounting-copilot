@@ -1,0 +1,260 @@
+{
+  "Comment": "Process uploaded financial document with OCR, classification, validation, and reconciliation",
+  "StartAt": "ExtractText",
+  "States": {
+    "ExtractText": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "ai-accounting-copilot-ocr-processor",
+        "Payload": {
+          "document_id.$": "$.document_id",
+          "s3_bucket.$": "$.s3_bucket",
+          "s3_key.$": "$.s3_key",
+          "user_id.$": "$.user_id"
+        }
+      },
+      "ResultPath": "$.ocr_result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "OCRFailure",
+            "States.TaskFailed"
+          ],
+          "ResultPath": "$.error",
+          "Next": "NotifyOCRFailure"
+        }
+      ],
+      "Next": "ClassifyTransaction"
+    },
+    "ClassifyTransaction": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "ai-accounting-copilot-transaction-classifier",
+        "Payload": {
+          "document_id.$": "$.document_id",
+          "user_id.$": "$.user_id",
+          "extracted_data.$": "$.ocr_result.Payload"
+        }
+      },
+      "ResultPath": "$.classification_result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "NotifyOCRFailure"
+        }
+      ],
+      "Next": "ValidateData"
+    },
+    "ValidateData": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "ai-accounting-copilot-data-validator",
+        "Payload": {
+          "transaction_id.$": "$.classification_result.Payload.transaction_id",
+          "user_id.$": "$.user_id",
+          "transaction_data.$": "$.classification_result.Payload"
+        }
+      },
+      "ResultPath": "$.validation_result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Next": "CheckConfidence"
+    },
+    "CheckConfidence": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.classification_result.Payload.confidence",
+          "NumericGreaterThanEquals": 0.7,
+          "Next": "ReconcileReceipts"
+        }
+      ],
+      "Default": "FlagForReview"
+    },
+    "FlagForReview": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:updateItem",
+      "Parameters": {
+        "TableName": "AccountingCopilot",
+        "Key": {
+          "PK": {
+            "S.$": "States.Format('USER#{}', $.user_id)"
+          },
+          "SK": {
+            "S.$": "States.Format('TXN#{}', $.classification_result.Payload.transaction_id)"
+          }
+        },
+        "UpdateExpression": "SET #status = :status, flagged_for_review = :flagged, updated_at = :updated_at",
+        "ExpressionAttributeNames": {
+          "#status": "status"
+        },
+        "ExpressionAttributeValues": {
+          ":status": {
+            "S": "pending_review"
+          },
+          ":flagged": {
+            "BOOL": true
+          },
+          ":updated_at": {
+            "S.$": "$$.State.EnteredTime"
+          }
+        }
+      },
+      "ResultPath": "$.flag_result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "DynamoDB.ProvisionedThroughputExceededException",
+            "DynamoDB.RequestLimitExceeded"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Next": "NotifyPendingApproval"
+    },
+    "NotifyPendingApproval": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:ai-accounting-copilot-pending-approvals",
+        "Subject": "Transaction Pending Review",
+        "Message": {
+          "default.$": "States.Format('Transaction {} requires review. Confidence: {}. Category: {}. Amount: {}', $.classification_result.Payload.transaction_id, $.classification_result.Payload.confidence, $.classification_result.Payload.category, $.classification_result.Payload.amount)"
+        }
+      },
+      "ResultPath": "$.notification_result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "SNS.ServiceException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Next": "ReconcileReceipts"
+    },
+    "ReconcileReceipts": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "ai-accounting-copilot-reconciliation-engine",
+        "Payload": {
+          "transaction_id.$": "$.classification_result.Payload.transaction_id",
+          "user_id.$": "$.user_id",
+          "transaction_data.$": "$.classification_result.Payload"
+        }
+      },
+      "ResultPath": "$.reconciliation_result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Next": "LogAuditTrail"
+    },
+    "LogAuditTrail": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "ai-accounting-copilot-audit-logger",
+        "Payload": {
+          "user_id.$": "$.user_id",
+          "action_type": "document_processing",
+          "document_id.$": "$.document_id",
+          "transaction_id.$": "$.classification_result.Payload.transaction_id",
+          "workflow_result": {
+            "ocr_status.$": "$.ocr_result.Payload.status",
+            "classification.$": "$.classification_result.Payload",
+            "validation.$": "$.validation_result.Payload",
+            "reconciliation.$": "$.reconciliation_result.Payload"
+          }
+        }
+      },
+      "ResultPath": "$.audit_result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 2,
+          "BackoffRate": 2.0
+        }
+      ],
+      "End": true
+    },
+    "NotifyOCRFailure": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:ai-accounting-copilot-ocr-failures",
+        "Subject": "OCR Processing Failed",
+        "Message": {
+          "default.$": "States.Format('OCR processing failed for document {}. Manual entry required. Error: {}', $.document_id, $.error.Cause)"
+        }
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "SNS.ServiceException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2,
+          "BackoffRate": 2.0
+        }
+      ],
+      "End": true
+    }
+  }
+}

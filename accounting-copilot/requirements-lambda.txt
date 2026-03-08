@@ -1,0 +1,18 @@
+# Lambda Runtime Dependencies Only
+# Minimal set to avoid GLIBC compatibility issues
+
+# AWS SDK (already available in Lambda runtime, but including for completeness)
+boto3>=1.34.0
+
+# AWS X-Ray SDK for tracing
+aws-xray-sdk>=2.12.0
+
+# JWT authentication - without crypto extra to avoid cryptography package
+# Using python-jose instead which has better Lambda compatibility
+python-jose>=3.3.0
+ecdsa>=0.18.0
+pyasn1>=0.4.8
+
+# Utilities
+python-dateutil>=2.8.2
+requests>=2.31.0
