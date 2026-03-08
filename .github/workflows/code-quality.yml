@@ -1,0 +1,213 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  lint-backend:
+    name: Lint Backend Code
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pylint mypy black isort
+        pip install -r requirements.txt
+    
+    - name: Run flake8
+      run: |
+        flake8 src/ tests/ --count --statistics --show-source
+      continue-on-error: true
+    
+    - name: Run pylint
+      run: |
+        pylint src/ --exit-zero
+      continue-on-error: true
+    
+    - name: Run mypy
+      run: |
+        mypy src/ --ignore-missing-imports
+      continue-on-error: true
+    
+    - name: Check code formatting with black
+      run: |
+        black --check src/ tests/
+      continue-on-error: true
+    
+    - name: Check import sorting with isort
+      run: |
+        isort --check-only src/ tests/
+      continue-on-error: true
+
+  lint-frontend:
+    name: Lint Frontend Code
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: frontend
+      run: npm ci
+    
+    - name: Run ESLint
+      working-directory: frontend
+      run: npm run lint
+      continue-on-error: true
+    
+    - name: Run Prettier check
+      working-directory: frontend
+      run: npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+      continue-on-error: true
+    
+    - name: Run TypeScript compiler
+      working-directory: frontend
+      run: npm run type-check
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+      continue-on-error: true
+    
+    - name: Upload Trivy results to GitHub Security
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy-results.sarif'
+      continue-on-error: true
+    
+    - name: Check Python dependencies for vulnerabilities
+      run: |
+        pip install safety
+        safety check --json || true
+      continue-on-error: true
+    
+    - name: Check npm dependencies for vulnerabilities
+      working-directory: frontend
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+
+  terraform-validate:
+    name: Validate Terraform
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.6.0
+    
+    - name: Terraform Format Check
+      working-directory: infrastructure
+      run: terraform fmt -check -recursive
+      continue-on-error: true
+    
+    - name: Terraform Init
+      working-directory: infrastructure
+      run: terraform init -backend=false
+    
+    - name: Terraform Validate
+      working-directory: infrastructure
+      run: terraform validate
+    
+    - name: Run tflint
+      uses: terraform-linters/setup-tflint@v4
+      with:
+        tflint_version: latest
+    
+    - name: Initialize tflint
+      working-directory: infrastructure
+      run: tflint --init
+      continue-on-error: true
+    
+    - name: Run tflint
+      working-directory: infrastructure
+      run: tflint
+      continue-on-error: true
+
+  code-complexity:
+    name: Check Code Complexity
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install radon
+      run: pip install radon
+    
+    - name: Check cyclomatic complexity
+      run: |
+        radon cc src/ -a -nb
+      continue-on-error: true
+    
+    - name: Check maintainability index
+      run: |
+        radon mi src/ -nb
+      continue-on-error: true
+
+  summary:
+    name: Quality Check Summary
+    runs-on: ubuntu-latest
+    needs: [lint-backend, lint-frontend, security-scan, terraform-validate, code-complexity]
+    if: always()
+    
+    steps:
+    - name: Check results
+      run: |
+        echo "Code Quality Check Summary"
+        echo "=========================="
+        echo "Backend Lint: ${{ needs.lint-backend.result }}"
+        echo "Frontend Lint: ${{ needs.lint-frontend.result }}"
+        echo "Security Scan: ${{ needs.security-scan.result }}"
+        echo "Terraform Validate: ${{ needs.terraform-validate.result }}"
+        echo "Code Complexity: ${{ needs.code-complexity.result }}"
+        
+        if [ "${{ needs.lint-backend.result }}" == "failure" ] || \
+           [ "${{ needs.lint-frontend.result }}" == "failure" ] || \
+           [ "${{ needs.terraform-validate.result }}" == "failure" ]; then
+          echo "❌ Some quality checks failed"
+          exit 1
+        else
+          echo "✅ All critical quality checks passed"
+        fi
