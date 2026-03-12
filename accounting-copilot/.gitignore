@@ -43,3 +43,6 @@ Thumbs.db
 
 # Deployment outputs
 deployment-outputs.txt
+
+# GitHub Actions
+.github/workflows/*.log
