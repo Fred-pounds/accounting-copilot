@@ -1,5 +1,8 @@
 # AI Accounting Copilot
 
+[![Run Tests](https://github.com/Fred-pounds/accounting-copilot/actions/workflows/test.yml/badge.svg)](https://github.com/Fred-pounds/accounting-copilot/actions/workflows/test.yml)
+[![Deploy to Staging](https://github.com/Fred-pounds/accounting-copilot/actions/workflows/deploy-staging.yml/badge.svg)](https://github.com/Fred-pounds/accounting-copilot/actions/workflows/deploy-staging.yml)
+
 An AI-powered financial management system for small and medium enterprises (SMEs) built on AWS serverless architecture.
 
 ## Overview
@@ -74,6 +77,16 @@ The AI Accounting Copilot automates daily financial activity capture, provides i
 - AWS CLI configured with appropriate credentials
 
 ## Setup
+
+### CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+- **Automated Testing**: Tests run on every pull request
+- **Staging Deployment**: Auto-deploys to staging when merged to `main`
+- **Production Deployment**: Manual deployment with approval required
+
+See [.github/SETUP_GUIDE.md](.github/SETUP_GUIDE.md) for CI/CD configuration details.
 
 ### 1. Install Dependencies
 
