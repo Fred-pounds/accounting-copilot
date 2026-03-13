@@ -1,18 +1,35 @@
 name: Deploy to Staging
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type "deploy" to confirm staging deployment'
+        required: true
+        type: string
 
 env:
   AWS_REGION: us-east-1
   ENVIRONMENT: staging
 
 jobs:
+  validate-input:
+    name: Validate Deployment Confirmation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirmation }}" != "deploy" ]; then
+            echo "❌ Deployment cancelled. You must type 'deploy' to confirm."
+            exit 1
+          fi
+          echo "✅ Deployment confirmed"
+
   deploy-infrastructure:
     name: Deploy Infrastructure
     runs-on: ubuntu-latest
+    needs: validate-input
     environment: staging
     
     outputs:
