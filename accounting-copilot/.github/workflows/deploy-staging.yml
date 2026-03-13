@@ -79,7 +79,6 @@ jobs:
     name: Get Infrastructure Outputs
     runs-on: ubuntu-latest
     needs: validate-input
-    environment: staging
     
     outputs:
       api_url: ${{ steps.get-outputs.outputs.api_url }}
@@ -147,7 +146,6 @@ jobs:
     name: Deploy Lambda Functions
     runs-on: ubuntu-latest
     needs: [get-infrastructure-outputs, build-lambdas]
-    environment: staging
     
     steps:
       - name: Checkout code
@@ -175,7 +173,6 @@ jobs:
     name: Deploy Frontend
     runs-on: ubuntu-latest
     needs: get-infrastructure-outputs
-    environment: staging
     
     steps:
       - name: Checkout code
