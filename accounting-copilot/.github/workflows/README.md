@@ -17,7 +17,7 @@ This directory contains the CI/CD workflows for the AI Accounting Copilot projec
 
 ### 2. Deploy to Staging (`deploy-staging.yml`)
 
-**Trigger:** Automatic on push to `main` branch, or manual via workflow dispatch
+**Trigger:** Manual only via workflow dispatch (requires typing "deploy" to confirm)
 
 **Purpose:** Deploys the application to the staging environment
 
@@ -77,9 +77,9 @@ Create two environments in your repository settings:
 
 ## Deployment Flow
 
-### Staging Deployment (Automatic)
+### Staging Deployment (Manual)
 ```
-Push to main → Run Tests → Deploy Infrastructure → Build Lambdas → Deploy Lambdas & Frontend → Notify
+Manual Trigger → Confirm "deploy" → Deploy Infrastructure → Build Lambdas → Deploy Lambdas & Frontend → Notify
 ```
 
 ### Production Deployment (Manual)
@@ -93,9 +93,12 @@ Manual Trigger → Confirm "deploy" → Approval (if configured) → Deploy Infr
 Tests run automatically on every pull request and push. No manual action needed.
 
 ### Deploying to Staging
-1. Merge your PR to the `main` branch
-2. Deployment starts automatically
-3. Monitor progress in the Actions tab
+1. Go to Actions tab in GitHub
+2. Select "Deploy to Staging" workflow
+3. Click "Run workflow"
+4. Type `deploy` in the confirmation field
+5. Click "Run workflow"
+6. Monitor deployment progress
 
 ### Deploying to Production
 1. Go to Actions tab in GitHub
