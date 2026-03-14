@@ -1,0 +1,36 @@
+SEATTLE COMMERCIAL PROPERTIES LLC
+890 Real Estate Plaza
+Seattle, WA 98101
+Phone: (206) 555-RENT
+Email: payments@seattlecommercial.com
+
+RENT INVOICE
+Invoice Date: March 1, 2024
+Due Date: March 5, 2024
+
+TENANT:
+AutoFix Repair Shop
+123 Main Street
+Seattle, WA 98101
+
+PROPERTY:
+123 Main Street, Seattle, WA 98101
+Commercial Auto Repair Facility
+3,500 sq ft shop + 500 sq ft office
+
+CHARGES:
+Description                              Amount
+------------------------------------------------
+Base Rent (March 2024)                $4,500.00
+Property Tax (Monthly)                  $450.00
+Common Area Maintenance                 $250.00
+
+                            TOTAL DUE: $5,200.00
+
+Payment Method: ACH Transfer
+Payment Status: PAID - March 4, 2024
+
+Lease Term: 5 years (2022-2027)
+Monthly Rent: $4,500.00
+
+Thank you for your prompt payment.

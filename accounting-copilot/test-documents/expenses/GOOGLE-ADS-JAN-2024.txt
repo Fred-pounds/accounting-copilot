@@ -1,0 +1,46 @@
+GOOGLE LLC
+Advertising Services
+1600 Amphitheatre Parkway
+Mountain View, CA 94043
+
+GOOGLE ADS INVOICE
+Invoice Number: 1234567890
+Invoice Date: January 31, 2024
+Billing Period: January 1-31, 2024
+
+ADVERTISER:
+AutoFix Repair Shop
+123 Main Street
+Seattle, WA 98101
+Customer ID: 123-456-7890
+
+CAMPAIGN SUMMARY:
+Campaign Name: Seattle Auto Repair - Search
+Impressions: 45,230
+Clicks: 892
+Click-Through Rate: 1.97%
+Average CPC: $3.45
+Total Spend: $3,077.40
+
+Campaign Name: Brake Repair Seattle - Search
+Impressions: 23,450
+Clicks: 456
+Click-Through Rate: 1.94%
+Average CPC: $4.20
+Total Spend: $1,915.20
+
+Campaign Name: Oil Change Seattle - Display
+Impressions: 89,340
+Clicks: 234
+Click-Through Rate: 0.26%
+Average CPC: $1.85
+Total Spend: $432.90
+
+                            SUBTOTAL:    $5,425.50
+                            Tax:            $0.00
+                            TOTAL DUE:   $5,425.50
+
+Payment Method: Credit Card ending in 4567
+Payment Status: PAID - February 1, 2024
+
+Thank you for advertising with Google.

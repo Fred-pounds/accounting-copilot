@@ -53,3 +53,9 @@ variable "document_expiration_days" {
   type        = number
   default     = 2555
 }
+
+variable "log_level" {
+  description = "Log level for Lambda functions"
+  type        = string
+  default     = "INFO"
+}

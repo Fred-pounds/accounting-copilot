@@ -91,7 +91,7 @@ export const handlers = [
   }),
 
   // Assistant endpoints
-  http.post(`${API_BASE_URL}/assistant/query`, async ({ request }) => {
+  http.post(`${API_BASE_URL}/assistant`, async ({ request }) => {
     const body = await request.json() as { question: string };
     
     // Simulate response time (requirement 6.1: within 5 seconds)
@@ -112,29 +112,22 @@ export const handlers = [
     return HttpResponse.json(response);
   }),
 
-  http.get(`${API_BASE_URL}/assistant/history`, () => {
+  http.get(`${API_BASE_URL}/assistant`, () => {
     return HttpResponse.json(mockConversationHistory);
   }),
 
   // Approvals endpoints
-  http.get(`${API_BASE_URL}/approvals/pending`, () => {
+  http.get(`${API_BASE_URL}/approvals`, () => {
     return HttpResponse.json(mockPendingApprovals);
   }),
 
-  http.post(`${API_BASE_URL}/approvals/:id/approve`, ({ params }) => {
-    const approval = mockPendingApprovals.find((a) => a.approval_id === params.id);
+  http.post(`${API_BASE_URL}/approvals`, async ({ request }) => {
+    const body = await request.json() as { action: string; approval_id: string };
+    const approval = mockPendingApprovals.find((a) => a.approval_id === body.approval_id);
     if (!approval) {
       return new HttpResponse(null, { status: 404 });
     }
-    return HttpResponse.json({ ...approval, status: 'approved' });
-  }),
-
-  http.post(`${API_BASE_URL}/approvals/:id/reject`, ({ params }) => {
-    const approval = mockPendingApprovals.find((a) => a.approval_id === params.id);
-    if (!approval) {
-      return new HttpResponse(null, { status: 404 });
-    }
-    return HttpResponse.json({ ...approval, status: 'rejected' });
+    return HttpResponse.json({ ...approval, status: body.action === 'approve' ? 'approved' : 'rejected' });
   }),
 
   // S3 upload endpoint (mocked)

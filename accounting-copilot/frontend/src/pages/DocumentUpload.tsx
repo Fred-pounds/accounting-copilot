@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useDropzone, FileRejection } from 'react-dropzone';
 import { apiClient } from '../services/api';
 
 interface UploadProgress {
@@ -12,18 +12,25 @@ interface UploadProgress {
 export const DocumentUpload: React.FC = () => {
   const [uploads, setUploads] = useState<UploadProgress[]>([]);
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+  const onDrop = useCallback(async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+    const rejectedUploads: UploadProgress[] = fileRejections.map(({ file, errors }) => {
+      let errorMessage = 'Upload failed';
+      if (errors[0]?.code === 'file-too-large') errorMessage = 'File size exceeds 10 MB limit';
+      else if (errors[0]?.code === 'file-invalid-type') errorMessage = 'Unsupported file type. Please upload JPEG, PNG, or PDF files.';
+      return { file, progress: 0, status: 'error', error: errorMessage };
+    });
+
     const newUploads: UploadProgress[] = acceptedFiles.map((file) => ({
       file,
       progress: 0,
       status: 'uploading' as const,
     }));
 
-    setUploads((prev) => [...prev, ...newUploads]);
+    setUploads((prev) => [...prev, ...rejectedUploads, ...newUploads]);
 
     for (let i = 0; i < acceptedFiles.length; i++) {
       const file = acceptedFiles[i];
-      const uploadIndex = uploads.length + i;
+      const uploadIndex = uploads.length + rejectedUploads.length + i;
 
       try {
         // Validate file
@@ -82,11 +89,34 @@ export const DocumentUpload: React.FC = () => {
     maxSize: 10 * 1024 * 1024, // 10 MB
   });
 
+  const getFileIcon = (type: string) => {
+    if (type === 'application/pdf') {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e11d48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+      );
+    }
+    return (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+        <polyline points="21 15 16 10 5 21" />
+      </svg>
+    );
+  };
+
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Upload Documents</h1>
-      <p style={styles.subtitle}>Upload receipts, invoices, or bank statements</p>
+      <div style={styles.header}>
+        <h1 style={styles.title}>Upload Documents</h1>
+        <p style={styles.subtitle}>Upload receipts, invoices, or bank statements for AI-powered processing</p>
+      </div>
 
+      {/* Dropzone */}
       <div
         {...getRootProps()}
         style={{
@@ -96,64 +126,111 @@ export const DocumentUpload: React.FC = () => {
       >
         <input {...getInputProps()} />
         <div style={styles.dropzoneContent}>
-          <svg
-            style={styles.uploadIcon}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
+          <div style={{
+            ...styles.uploadIconWrap,
+            ...(isDragActive ? styles.uploadIconActive : {}),
+          }}>
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            />
-          </svg>
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+          </div>
           {isDragActive ? (
-            <p style={styles.dropzoneText}>Drop files here...</p>
+            <p style={styles.dropzoneTextActive}>Drop your files here!</p>
           ) : (
             <>
               <p style={styles.dropzoneText}>
-                Drag and drop files here, or click to select
+                <strong>Click to upload</strong> or drag and drop
               </p>
               <p style={styles.dropzoneHint}>
-                Supported formats: JPEG, PNG, PDF (max 10 MB)
+                JPEG, PNG, or PDF — up to 10 MB
               </p>
             </>
           )}
         </div>
       </div>
 
+      {/* Supported formats */}
+      <div style={styles.formatRow}>
+        <div style={styles.formatItem}>
+          <span style={{ ...styles.formatDot, backgroundColor: '#6366f1' }} />
+          <span style={styles.formatLabel}>Receipts</span>
+        </div>
+        <div style={styles.formatItem}>
+          <span style={{ ...styles.formatDot, backgroundColor: '#059669' }} />
+          <span style={styles.formatLabel}>Invoices</span>
+        </div>
+        <div style={styles.formatItem}>
+          <span style={{ ...styles.formatDot, backgroundColor: '#f59e0b' }} />
+          <span style={styles.formatLabel}>Bank Statements</span>
+        </div>
+      </div>
+
+      {/* Upload list */}
       {uploads.length > 0 && (
         <div style={styles.uploadsList}>
-          <h2 style={styles.uploadsTitle}>Uploads</h2>
+          <h2 style={styles.uploadsTitle}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+              <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+            </svg>
+            Uploads
+          </h2>
           {uploads.map((upload, index) => (
             <div key={index} style={styles.uploadItem}>
-              <div style={styles.uploadInfo}>
-                <span style={styles.fileName}>{upload.file.name}</span>
-                <span style={styles.fileSize}>
-                  {(upload.file.size / 1024).toFixed(1)} KB
-                </span>
+              <div style={styles.uploadFileIcon}>
+                {getFileIcon(upload.file.type)}
               </div>
-
-              {upload.status === 'uploading' && (
-                <div style={styles.progressContainer}>
-                  <div
-                    style={{
-                      ...styles.progressBar,
-                      width: `${upload.progress}%`,
-                    }}
-                  />
+              <div style={styles.uploadDetails}>
+                <div style={styles.uploadInfo}>
+                  <span style={styles.fileName}>{upload.file.name}</span>
+                  <span style={styles.fileSize}>
+                    {upload.file.size > 1024 * 1024
+                      ? `${(upload.file.size / (1024 * 1024)).toFixed(1)} MB`
+                      : `${(upload.file.size / 1024).toFixed(1)} KB`}
+                  </span>
                 </div>
-              )}
 
-              {upload.status === 'success' && (
-                <div style={styles.statusSuccess}>✓ Uploaded successfully</div>
-              )}
+                {upload.status === 'uploading' && (
+                  <div style={styles.progressContainer}>
+                    <div
+                      style={{
+                        ...styles.progressBar,
+                        width: `${upload.progress}%`,
+                      }}
+                    />
+                  </div>
+                )}
 
-              {upload.status === 'error' && (
-                <div style={styles.statusError}>✗ {upload.error}</div>
-              )}
+                {upload.status === 'success' && (
+                  <div style={styles.statusSuccess}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Uploaded successfully — AI processing started
+                  </div>
+                )}
+
+                {upload.status === 'error' && (
+                  <div style={styles.statusError}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                    {upload.error}
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -164,99 +241,182 @@ export const DocumentUpload: React.FC = () => {
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    padding: '2rem',
-    maxWidth: '800px',
+    padding: 'var(--space-page)',
+    maxWidth: '720px',
     margin: '0 auto',
   },
+  header: {
+    marginBottom: '28px',
+  },
   title: {
-    fontSize: '1.875rem',
-    fontWeight: 'bold',
-    marginBottom: '0.5rem',
+    fontSize: '1.75rem',
+    fontWeight: 800,
+    color: 'var(--color-text)',
+    letterSpacing: '-0.5px',
   },
   subtitle: {
-    color: '#666',
-    marginBottom: '2rem',
+    color: 'var(--color-text-muted)',
+    marginTop: '4px',
+    fontSize: '0.9rem',
   },
   dropzone: {
-    border: '2px dashed #ddd',
-    borderRadius: '8px',
-    padding: '3rem',
+    border: '2px dashed var(--color-border)',
+    borderRadius: 'var(--radius-xl)',
+    padding: '48px 24px',
     textAlign: 'center',
     cursor: 'pointer',
-    transition: 'all 0.2s',
-    backgroundColor: '#fafafa',
+    transition: 'all var(--transition-base)',
+    backgroundColor: 'var(--color-card)',
   },
   dropzoneActive: {
-    borderColor: '#007bff',
-    backgroundColor: '#f0f8ff',
+    borderColor: 'var(--color-primary)',
+    backgroundColor: 'var(--color-primary-50)',
+    borderStyle: 'solid',
   },
   dropzoneContent: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: '1rem',
+    gap: '12px',
   },
-  uploadIcon: {
-    width: '48px',
-    height: '48px',
-    color: '#999',
+  uploadIconWrap: {
+    width: '72px',
+    height: '72px',
+    borderRadius: '20px',
+    backgroundColor: 'var(--color-primary-50)',
+    color: 'var(--color-primary)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '4px',
+    transition: 'all var(--transition-base)',
+  },
+  uploadIconActive: {
+    backgroundColor: 'var(--color-primary)',
+    color: 'white',
+    transform: 'scale(1.1)',
   },
   dropzoneText: {
-    fontSize: '1.125rem',
-    color: '#333',
+    fontSize: '1rem',
+    color: 'var(--color-text)',
+    margin: 0,
+  },
+  dropzoneTextActive: {
+    fontSize: '1.1rem',
+    color: 'var(--color-primary)',
+    fontWeight: 700,
     margin: 0,
   },
   dropzoneHint: {
-    fontSize: '0.875rem',
-    color: '#999',
+    fontSize: '0.8rem',
+    color: 'var(--color-text-muted)',
     margin: 0,
   },
+  formatRow: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '24px',
+    marginTop: '20px',
+    marginBottom: '8px',
+  },
+  formatItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+  },
+  formatDot: {
+    width: '8px',
+    height: '8px',
+    borderRadius: '50%',
+    display: 'inline-block',
+  },
+  formatLabel: {
+    fontSize: '0.8rem',
+    color: 'var(--color-text-muted)',
+    fontWeight: 500,
+  },
   uploadsList: {
-    marginTop: '2rem',
+    marginTop: '32px',
   },
   uploadsTitle: {
-    fontSize: '1.25rem',
-    fontWeight: '600',
-    marginBottom: '1rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '1.05rem',
+    fontWeight: 700,
+    color: 'var(--color-text)',
+    marginBottom: '16px',
   },
   uploadItem: {
-    backgroundColor: 'white',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    padding: '1rem',
-    marginBottom: '0.75rem',
+    display: 'flex',
+    gap: '14px',
+    backgroundColor: 'var(--color-card)',
+    border: '1px solid var(--color-border)',
+    borderRadius: 'var(--radius-lg)',
+    padding: '16px',
+    marginBottom: '10px',
+    animation: 'slideUp 0.3s ease-out',
+  },
+  uploadFileIcon: {
+    width: '44px',
+    height: '44px',
+    borderRadius: '10px',
+    backgroundColor: 'var(--color-surface)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  uploadDetails: {
+    flex: 1,
+    minWidth: 0,
   },
   uploadInfo: {
     display: 'flex',
     justifyContent: 'space-between',
-    marginBottom: '0.5rem',
+    alignItems: 'center',
+    marginBottom: '8px',
   },
   fileName: {
-    fontWeight: '500',
+    fontWeight: 600,
+    fontSize: '0.9rem',
+    color: 'var(--color-text)',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap' as const,
   },
   fileSize: {
-    color: '#999',
-    fontSize: '0.875rem',
+    color: 'var(--color-text-muted)',
+    fontSize: '0.8rem',
+    flexShrink: 0,
+    marginLeft: '8px',
   },
   progressContainer: {
-    height: '8px',
-    backgroundColor: '#f0f0f0',
-    borderRadius: '4px',
+    height: '6px',
+    backgroundColor: 'var(--color-border-light)',
+    borderRadius: 'var(--radius-full)',
     overflow: 'hidden',
   },
   progressBar: {
     height: '100%',
-    backgroundColor: '#007bff',
-    transition: 'width 0.3s',
+    background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
+    borderRadius: 'var(--radius-full)',
+    transition: 'width 0.4s ease',
   },
   statusSuccess: {
-    color: '#28a745',
-    fontSize: '0.875rem',
-    fontWeight: '500',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    color: 'var(--color-success)',
+    fontSize: '0.8rem',
+    fontWeight: 600,
   },
   statusError: {
-    color: '#dc3545',
-    fontSize: '0.875rem',
-    fontWeight: '500',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    color: 'var(--color-danger)',
+    fontSize: '0.8rem',
+    fontWeight: 600,
   },
 };

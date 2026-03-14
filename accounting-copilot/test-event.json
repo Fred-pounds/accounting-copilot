@@ -1,0 +1,14 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": {
+          "name": "accounting-copilot-documents-280250685594"
+        },
+        "object": {
+          "key": "documents/f215b4e4-70f1-708d-99a4-f206948b9f21/receipts/2026/03/doc_c1ab81824c88.png"
+        }
+      }
+    }
+  ]
+}

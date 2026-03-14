@@ -1,0 +1,40 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-003
+Date: January 12, 2024
+Due Date: January 27, 2024
+
+BILL TO:
+Jennifer Martinez
+321 Elm Drive
+Seattle, WA 98104
+Phone: (206) 555-8901
+
+VEHICLE INFORMATION:
+Year: 2019
+Make: Ford
+Model: F-150
+VIN: 1FTEW1EP5KFA12345
+Mileage: 32,100
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Engine Diagnostic Scan                1   $125.00   $125.00
+Check Engine Light Diagnosis          1    $95.00    $95.00
+O2 Sensor Replacement                 1   $185.00   $185.00
+Labor (2.5 hours @ $95/hr)          2.5    $95.00   $237.50
+
+                                    Subtotal:        $642.50
+                                    Sales Tax (10%):  $64.25
+                                    TOTAL DUE:       $706.75
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: Check engine light resolved. Recommend fuel system cleaning at next service.
+
+Thank you for your business!

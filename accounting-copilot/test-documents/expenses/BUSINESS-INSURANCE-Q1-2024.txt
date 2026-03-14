@@ -1,0 +1,36 @@
+PACIFIC NORTHWEST INSURANCE GROUP
+Commercial Insurance Division
+1500 Insurance Plaza, Seattle, WA 98101
+Phone: (206) 555-SAFE
+www.pnwinsurance.com
+
+QUARTERLY PREMIUM INVOICE
+Policy Number: COM-2024-789456
+Invoice Date: January 5, 2024
+Coverage Period: January 1, 2024 - March 31, 2024
+
+INSURED:
+AutoFix Repair Shop
+123 Main Street
+Seattle, WA 98101
+Owner: John Smith
+
+COVERAGE SUMMARY:
+Policy Type                          Coverage        Premium
+------------------------------------------------------------
+General Liability                   $2,000,000      $1,450.00
+Property Insurance                  $500,000          $625.00
+Workers Compensation                4 Employees       $890.00
+Garage Keepers Liability            $1,000,000        $485.00
+Business Auto (2 vehicles)          $500,000          $320.00
+Equipment Breakdown                 $250,000          $180.00
+
+                                    Subtotal:       $3,950.00
+                                    Policy Fee:        $50.00
+                                    TOTAL DUE:      $4,000.00
+
+Payment Due: January 15, 2024
+Payment Method: Check #1234
+Payment Status: PAID - January 10, 2024
+
+Thank you for choosing Pacific Northwest Insurance Group.

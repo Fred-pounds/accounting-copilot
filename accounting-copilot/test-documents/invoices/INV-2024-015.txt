@@ -1,0 +1,40 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-015
+Date: March 15, 2024
+Due Date: March 30, 2024
+
+BILL TO:
+Michelle Taylor
+765 Hickory Lane
+Seattle, WA 98114
+Phone: (206) 555-8765
+
+VEHICLE INFORMATION:
+Year: 2018
+Make: Dodge
+Model: Ram 1500
+VIN: 1C6RR7FT5JS123456
+Mileage: 48,900
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Differential Service                  1   $145.00   $145.00
+Transfer Case Service                 1   $125.00   $125.00
+Transmission Service                  1   $189.00   $189.00
+Labor (2.5 hours @ $95/hr)          2.5    $95.00   $237.50
+
+                                    Subtotal:        $696.50
+                                    Sales Tax (10%):  $69.65
+                                    TOTAL DUE:       $766.15
+
+Payment Method: Check #5678
+Payment Status: PAID
+
+Notes: 4WD system serviced. All fluids fresh.
+
+Thank you for your business!

@@ -1,0 +1,40 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-006
+Date: January 28, 2024
+Due Date: February 12, 2024
+
+BILL TO:
+Kevin Brown
+543 Ash Street
+Seattle, WA 98111
+Phone: (206) 555-5678
+
+VEHICLE INFORMATION:
+Year: 2017
+Make: Hyundai
+Model: Elantra
+VIN: 5NPD84LF5HH123456
+Mileage: 61,200
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Wheel Alignment                       1    $89.00    $89.00
+Tire Balance (All 4)                  1    $65.00    $65.00
+Suspension Inspection                 1    $45.00    $45.00
+Labor (1.5 hours @ $95/hr)          1.5    $95.00   $142.50
+
+                                    Subtotal:        $341.50
+                                    Sales Tax (10%):  $34.15
+                                    TOTAL DUE:       $375.65
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: Alignment within spec. Tires wearing evenly.
+
+Thank you for your business!

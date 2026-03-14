@@ -50,13 +50,15 @@ export interface DashboardSummary {
   total_expenses: number;
   profit_trend: Array<{
     month: string;
+    income: number;
+    expenses: number;
     profit: number;
   }>;
   top_categories: Array<{
     category: string;
-    amount: number;
+    total: number;
   }>;
-  pending_approvals_count: number;
+  pending_approvals_count?: number;
 }
 
 export interface AuditEntry {

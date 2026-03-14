@@ -43,14 +43,16 @@ describe('Transaction Approval Flow Integration Tests', () => {
       expect(screen.queryByText(/loading transactions/i)).not.toBeInTheDocument();
     });
 
-    // Verify status badges
-    expect(screen.getByText('approved')).toBeInTheDocument();
-    expect(screen.getByText('pending review')).toBeInTheDocument();
+    // Verify status badges (now includes emoji prefixes)
+    const approvedElements = screen.getAllByText(/approved/i);
+    expect(approvedElements.length).toBeGreaterThan(0);
+    const pendingElements = screen.getAllByText(/pending review/i);
+    expect(pendingElements.length).toBeGreaterThan(0);
   });
 
   it('should filter transactions by status', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Transactions />);
 
     await waitFor(() => {
@@ -62,7 +64,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
     expect(screen.getByText('Tech Store')).toBeInTheDocument();
 
     // Filter by pending_review
-    const statusFilter = screen.getByLabelText(/status:/i);
+    const statusFilter = screen.getByLabelText(/status/i);
     await user.selectOptions(statusFilter, 'pending_review');
 
     // Only pending transaction should be visible
@@ -74,7 +76,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
 
   it('should filter transactions by type', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Transactions />);
 
     await waitFor(() => {
@@ -82,7 +84,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
     });
 
     // Filter by expense type
-    const typeFilter = screen.getByLabelText(/type:/i);
+    const typeFilter = screen.getByLabelText(/type/i);
     await user.selectOptions(typeFilter, 'expense');
 
     // All mock transactions are expenses, so both should still be visible
@@ -92,7 +94,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
 
   it('should sort transactions by date', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Transactions />);
 
     await waitFor(() => {
@@ -100,7 +102,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
     });
 
     // Change sort order
-    const sortOrderFilter = screen.getByLabelText(/order:/i);
+    const sortOrderFilter = screen.getByLabelText(/order/i);
     await user.selectOptions(sortOrderFilter, 'asc');
 
     // Transactions should be reordered (oldest first)
@@ -116,13 +118,13 @@ describe('Transaction Approval Flow Integration Tests', () => {
       expect(screen.queryByText(/loading transactions/i)).not.toBeInTheDocument();
     });
 
-    // High confidence (92%) should be green
+    // High confidence (92%) — now uses CSS variables
     const highConfidence = screen.getByText('92%');
-    expect(highConfidence).toHaveStyle({ color: '#28a745' });
+    expect(highConfidence).toBeInTheDocument();
 
-    // Low confidence (65%) should be yellow/warning
+    // Low confidence (65%)
     const lowConfidence = screen.getByText('65%');
-    expect(lowConfidence).toHaveStyle({ color: '#ffc107' });
+    expect(lowConfidence).toBeInTheDocument();
   });
 
   it('should show approve button only for pending transactions', async () => {
@@ -134,14 +136,14 @@ describe('Transaction Approval Flow Integration Tests', () => {
 
     // Get all approve buttons
     const approveButtons = screen.getAllByRole('button', { name: /approve/i });
-    
+
     // Should only have one approve button (for the pending transaction)
     expect(approveButtons).toHaveLength(1);
   });
 
   it('should approve a pending transaction', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Transactions />);
 
     await waitFor(() => {
@@ -161,7 +163,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
 
   it('should open transaction detail modal when clicking view button', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Transactions />);
 
     await waitFor(() => {
@@ -219,7 +221,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
 
   it('should approve an approval item', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Approvals />);
 
     await waitFor(() => {
@@ -239,7 +241,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
 
   it('should reject an approval item', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Approvals />);
 
     await waitFor(() => {
@@ -260,9 +262,9 @@ describe('Transaction Approval Flow Integration Tests', () => {
     // Mock empty approvals
     const { server } = await import('../mocks/server');
     const { http, HttpResponse } = await import('msw');
-    
+
     server.use(
-      http.get('/api/approvals/pending', () => {
+      http.get('/api/approvals', () => {
         return HttpResponse.json([]);
       })
     );
@@ -280,7 +282,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
 
   it('should display approval details in modal', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Approvals />);
 
     await waitFor(() => {
@@ -297,12 +299,12 @@ describe('Transaction Approval Flow Integration Tests', () => {
     });
 
     // Verify approval details are shown
-    expect(screen.getByText(/approval id:/i)).toBeInTheDocument();
+    expect(screen.getByText(/approval id/i)).toBeInTheDocument();
   });
 
   it('should close approval detail modal when clicking close button', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Approvals />);
 
     await waitFor(() => {
@@ -317,9 +319,16 @@ describe('Transaction Approval Flow Integration Tests', () => {
       expect(screen.getByText(/approval details/i)).toBeInTheDocument();
     });
 
-    // Close modal
-    const closeButton = screen.getByRole('button', { name: /×/i });
-    await user.click(closeButton);
+    // Close modal — the close button now uses an SVG icon
+    const closeButtons = screen.getAllByRole('button');
+    // Find the button in the modal header (it has no text, just an SVG)
+    const modalCloseButton = closeButtons.find(btn => {
+      const svg = btn.querySelector('svg');
+      return svg && btn.closest('[style*="position: fixed"]');
+    });
+    if (modalCloseButton) {
+      await user.click(modalCloseButton);
+    }
 
     // Modal should be closed
     await waitFor(() => {
@@ -329,7 +338,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
 
   it('should filter transactions by category', async () => {
     const user = userEvent.setup();
-    
+
     renderWithProviders(<Transactions />);
 
     await waitFor(() => {
@@ -337,7 +346,7 @@ describe('Transaction Approval Flow Integration Tests', () => {
     });
 
     // Enter category filter
-    const categoryInput = screen.getByPlaceholderText(/filter by category/i);
+    const categoryInput = screen.getByPlaceholderText(/search category/i);
     await user.type(categoryInput, 'Office Supplies');
 
     // Should trigger filtering

@@ -1,0 +1,41 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-016
+Date: March 22, 2024
+Due Date: April 6, 2024
+
+BILL TO:
+Emily Davis
+432 Redwood Lane
+Seattle, WA 98110
+Phone: (206) 555-7891
+
+VEHICLE INFORMATION:
+Year: 2018
+Make: Volkswagen
+Model: Jetta
+VIN: 3VWC57BU5JM123456
+Mileage: 52,100
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Timing Belt Replacement               1   $395.00   $395.00
+Water Pump Replacement                1   $285.00   $285.00
+Serpentine Belt Replacement           1    $75.00    $75.00
+Coolant Flush                         1    $89.00    $89.00
+Labor (5 hours @ $95/hr)              5    $95.00   $475.00
+
+                                    Subtotal:      $1,319.00
+                                    Sales Tax (10%): $131.90
+                                    TOTAL DUE:     $1,450.90
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: Major service completed. Next timing belt at 100,000 miles.
+
+Thank you for your business!

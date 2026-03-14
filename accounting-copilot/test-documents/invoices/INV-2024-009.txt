@@ -1,0 +1,41 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-009
+Date: February 10, 2024
+Due Date: February 25, 2024
+
+BILL TO:
+Amanda Garcia
+876 Poplar Drive
+Seattle, WA 98112
+Phone: (206) 555-6543
+
+VEHICLE INFORMATION:
+Year: 2020
+Make: Kia
+Model: Sorento
+VIN: 5XYPGDA59LG123456
+Mileage: 35,600
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Oil Change (Synthetic)                1    $75.00    $75.00
+Tire Rotation                         1    $35.00    $35.00
+Brake Inspection                      1    $45.00    $45.00
+Wiper Blade Replacement               2    $18.00    $36.00
+Labor (1 hour @ $95/hr)               1    $95.00    $95.00
+
+                                    Subtotal:        $286.00
+                                    Sales Tax (10%):  $28.60
+                                    TOTAL DUE:       $314.60
+
+Payment Method: Debit Card
+Payment Status: PAID
+
+Notes: Brakes at 60%. Next service in 6 months.
+
+Thank you for your business!

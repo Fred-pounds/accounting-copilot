@@ -45,15 +45,26 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             logger.info(f"Processing file: s3://{s3_bucket}/{s3_key}")
             
             # Extract metadata from S3 key
-            # Format: documents/{user_id}/{doc_type}/{year}/{month}/{document_id}.{ext}
+            # Support two formats:
+            # 1. Simple: documents/{filename}.{ext}
+            # 2. Structured: documents/{user_id}/{doc_type}/{year}/{month}/{document_id}.{ext}
             key_parts = s3_key.split('/')
             
-            if len(key_parts) < 6 or key_parts[0] != 'documents':
-                logger.warning(f"Skipping file with unexpected key format: {s3_key}")
+            if not s3_key.startswith('documents/'):
+                logger.warning(f"Skipping file not in documents/ prefix: {s3_key}")
                 continue
             
-            user_id = key_parts[1]
-            document_id = key_parts[5].split('.')[0]  # Remove extension
+            # Extract filename and document_id
+            filename = key_parts[-1]
+            document_id = filename.rsplit('.', 1)[0]  # Remove extension
+            
+            # Determine user_id (use 'default' for simple format)
+            if len(key_parts) >= 6:
+                # Structured format
+                user_id = key_parts[1]
+            else:
+                # Simple format - use default user
+                user_id = 'default'
             
             # Prepare workflow input
             workflow_input = {

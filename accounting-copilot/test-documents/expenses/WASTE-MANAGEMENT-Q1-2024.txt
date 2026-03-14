@@ -1,0 +1,34 @@
+WASTE MANAGEMENT OF WASHINGTON
+Commercial Services Division
+2500 Waste Way, Seattle, WA 98115
+Phone: (206) 555-DUMP
+www.wm.com
+
+QUARTERLY SERVICE INVOICE
+Account Number: WM-123456
+Invoice Date: March 25, 2024
+Service Period: January 1 - March 31, 2024
+
+SERVICE ADDRESS:
+AutoFix Repair Shop
+123 Main Street
+Seattle, WA 98101
+
+SERVICE SUMMARY:
+Service Type                         Frequency    Monthly    Total
+------------------------------------------------------------------
+Commercial Dumpster (6 yard)         2x/week      $285.00   $855.00
+Recycling Container (3 yard)         1x/week      $125.00   $375.00
+Hazardous Waste Pickup               Monthly      $95.00    $285.00
+Oil Disposal Service                 Monthly      $75.00    $225.00
+Environmental Fee                    Quarterly    $45.00    $135.00
+
+                                    Subtotal (3 months):   $1,875.00
+                                    Sales Tax (10%):         $187.50
+                                    TOTAL DUE:             $2,062.50
+
+Payment Due: April 10, 2024
+Payment Method: Auto-Pay (Bank Account)
+Payment Status: PAID - March 28, 2024
+
+Thank you for choosing Waste Management.

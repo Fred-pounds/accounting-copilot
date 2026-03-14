@@ -1,0 +1,42 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-007
+Date: February 2, 2024
+Due Date: February 17, 2024
+
+BILL TO:
+Daniel White
+432 Sycamore Road
+Seattle, WA 98115
+Phone: (206) 555-4321
+
+VEHICLE INFORMATION:
+Year: 2019
+Make: Audi
+Model: A4
+VIN: WAUENAF49KN123456
+Mileage: 38,200
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Oil Change (Full Synthetic)           1    $95.00    $95.00
+Tire Rotation                         1    $35.00    $35.00
+Brake Fluid Flush                     1    $89.00    $89.00
+Coolant Service                       1    $95.00    $95.00
+Multi-Point Inspection                1    $0.00     $0.00
+Labor (2 hours @ $95/hr)              2    $95.00   $190.00
+
+                                    Subtotal:        $504.00
+                                    Sales Tax (10%):  $50.40
+                                    TOTAL DUE:       $554.40
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: All systems operating normally. Next service at 45,000 miles.
+
+Thank you for your business!

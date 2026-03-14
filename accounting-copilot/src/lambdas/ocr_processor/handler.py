@@ -41,7 +41,7 @@ def convert_floats_to_decimal(obj):
 
 def extract_text_from_document(s3_bucket: str, s3_key: str, max_retries: int = 2) -> Dict[str, Any]:
     """
-    Extract text from document using Textract with retry logic.
+    Extract text from document using Textract or direct S3 read for text files.
     
     Args:
         s3_bucket: S3 bucket name
@@ -56,6 +56,33 @@ def extract_text_from_document(s3_bucket: str, s3_key: str, max_retries: int = 2
     """
     from botocore.exceptions import ClientError
     
+    # Check if file is a text file - read directly from S3
+    if s3_key.lower().endswith('.txt'):
+        try:
+            logger.info(f"Reading text file directly from s3://{s3_bucket}/{s3_key}")
+            response = s3_client.get_object(Bucket=s3_bucket, Key=s3_key)
+            extracted_text = response['Body'].read().decode('utf-8')
+            logger.info(f"Read {len(extracted_text)} characters from text file")
+            
+            # Parse fields - determine document type from S3 key if possible
+            document_type = 'receipt'  # default
+            if 'invoice' in s3_key.lower() or 'INV-' in s3_key:
+                document_type = 'invoice'
+            elif 'bank' in s3_key.lower() or 'statement' in s3_key.lower():
+                document_type = 'bank_statement'
+            
+            parsed_fields = parse_document_fields(extracted_text, document_type)
+            
+            return {
+                'extracted_text': extracted_text,
+                'parsed_fields': parsed_fields,
+                'block_count': len(extracted_text.split('\n'))
+            }
+        except Exception as e:
+            logger.error(f"Failed to read text file: {str(e)}")
+            raise OCRFailure(f"Failed to read text file: {str(e)}")
+    
+    # For images and PDFs, use Textract
     for attempt in range(max_retries + 1):
         try:
             logger.info(f"Starting Textract for s3://{s3_bucket}/{s3_key} (attempt {attempt + 1}/{max_retries + 1})")

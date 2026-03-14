@@ -1,0 +1,462 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90m/home/adeny/Documents/codes/kiro-ai-hackathon/accounting-copilot/frontend[39m
+
+[90mstderr[2m | src/tests/integration/assistantChat.test.tsx[2m > [22m[2mAssistant Chat Interaction Integration Tests[2m > [22m[2mshould render assistant interface with welcome message
+[22m[39m⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [31m❯[39m src/tests/integration/assistantChat.test.tsx [2m([22m[2m17 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 4140[2mms[22m[39m
+[31m     [31m×[31m should render assistant interface with welcome message[39m[32m 211[2mms[22m[39m
+     [32m✓[39m should load and display conversation history[32m 31[2mms[22m[39m
+     [33m[2m✓[22m[39m should send a question and receive a response [33m 694[2mms[22m[39m
+     [33m[2m✓[22m[39m should respond within 5 seconds (Requirement 6.1) [33m 402[2mms[22m[39m
+     [32m✓[39m should display loading indicator while waiting for response[32m 214[2mms[22m[39m
+     [32m✓[39m should clear input field after sending message[32m 205[2mms[22m[39m
+     [32m✓[39m should disable send button when input is empty[32m 148[2mms[22m[39m
+     [32m✓[39m should enable send button when input has text[32m 131[2mms[22m[39m
+     [32m✓[39m should display citations with assistant responses[32m 20[2mms[22m[39m
+     [32m✓[39m should display confidence score with assistant responses[32m 19[2mms[22m[39m
+[31m     [31m×[31m should handle API errors gracefully[39m[33m 1134[2mms[22m[39m
+     [32m✓[39m should prevent sending empty messages[32m 188[2mms[22m[39m
+     [32m✓[39m should prevent sending messages while loading[32m 290[2mms[22m[39m
+     [33m[2m✓[22m[39m should auto-scroll to bottom when new messages arrive [33m 304[2mms[22m[39m
+     [32m✓[39m should display message timestamps[32m 32[2mms[22m[39m
+     [32m✓[39m should distinguish between user and assistant messages visually[32m 18[2mms[22m[39m
+     [32m✓[39m should handle form submission with Enter key[32m 94[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/tests/integration/assistantChat.test.tsx[2m > [22mAssistant Chat Interaction Integration Tests[2m > [22mshould render assistant interface with welcome message
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: /can i afford to hire a new employee/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"padding: var(--space-page); max-width: 900px; margin: 0px auto; height: calc(100vh - 2rem); display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; display: flex; flex-direction: column; background-color: var(--color-card); border-radius: var(--radius-xl); box-shadow: var(--shadow-md); overflow: hidden;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"flex: 1 1 0%; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-card) 100%);"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; gap: 10px; align-items: flex-end; animation: slideUp 0.3s ease-out; justify-content: flex-end;"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"max-width: 75%; padding: 12px 16px; border-radius: 16px; background: linear-gradient(135deg, rgb(99, 102, 241), rgb(124, 58, 237)); color: white; border-bottom-right-radius: 4px;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"line-height: 1.6; font-size: 0.9rem;"[39m
+              [36m>[39m
+                [0mWhat are my top expenses this month?[0m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"font-size: 0.65rem; opacity: 0.5; margin-top: 6px; text-align: right;"[39m
+              [36m>[39m
+                [0m02:30 PM[0m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; gap: 10px; align-items: flex-end; animation: slideUp 0.3s ease-out; justify-content: flex-start;"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, rgb(99, 102, 241), rgb(139, 92, 246)); display: flex; align-items: center; justify-content: center; flex-shrink: 0;"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"16"[39m
+                [33mstroke[39m=[32m"white"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"16"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M12 2L2 7l10 5 10-5-10-5z"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M2 17l10 5 10-5"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M2 12l10 5 10-5"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"max-width: 75%; padding: 12px 16px; border-radius: 16px; background-color: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); border-bottom-left-radius: 4px;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"line-height: 1.6; font-size: 0.9rem;"[39m
+              [36m>[39m
+                [0mYour top expenses this month are Office Supplies ($2,500), Marketing ($2,000), and Utilities ($1,500).[0m
+                [36m<div[39m
+                  [33mstyle[39m=[32m"margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--color-border);"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mstyle[39m=[32m"display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 8px;"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mheight[39m=[32m"12"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [33mwidth[39m=[32m"12"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"[39m
+                      [36m/>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                    [0mSources[0m
+                  [36m</div>[39m
+                  [36m<button[39m
+                    [33mstyle[39m=[32m"display: inline-flex; align-items: center; padding: 4px 10px; background-color: var(--color-primary); color: white; border: medium; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 4px; font-family: inherit;"[39m
+                  [36m>[39m
+                    [0mTransaction [0m
+                    [0mtxn-1[0m
+                    [0m...[0m
+                  [36m</button>[39m
+                  [36m<button[39m
+                    [33mstyle[39m=[32m"display: inline-flex; align-items: center; padding: 4px 10px; background-color: var(--color-primary); color: white; border: medium; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 4px; font-family: inherit;"[39m
+                  [36m>[39m
+                    [0mTransaction [0m
+                    [0mtxn-4[0m
+                    [0m...[0m
+                  [36m</button>[39m
+                  [36m<button[39m
+                    [33mstyle[39m=[32m"display: inline-flex; align-items: center; padding: 4px 10px; background-color: var(--color-primary); color: white; border: medium; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 4px; font-family: inherit;"[39m
+                  [36m>[39m
+                    [0mTransaction [0m
+                    [0mtxn-7[0m
+                    [0m...[0m
+                  [36m</button>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mstyle[39m=[32m"margin-top: 8px;"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mstyle[39m=[32m"padding: 3px 10px; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; display: inline-block; background-color: var(--color-success-light); color: var(--color-success-dark);"[39m
+                  [36m>[39m
+                    [0m95[0m
+                    [0m% confidence[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"font-size: 0.65rem; opacity: 0.5; margin-top: 6px; text-align: left;"[39m
+              [36m>[39m
+                [0m02:30 PM[0m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div />[39m
+        [36m</div>[39m
+        [36m<form[39m
+          [33mstyle[39m=[32m"display: flex; gap: 10px; padding: 16px 20px; border-top: 1px solid var(--color-border); background-color: var(--color-card);"[39m
+        [36m>[39m
+          [36m<input[39m
+            [33mplaceholder[39m=[32m"Ask about your finances..."[39m
+            [33mstyle[39m=[32m"flex: 1 1 0%; padding: 12px 16px; border: 1.5px solid var(--color-border); border-radius: var(--radius-full); font-size: 0.9rem; background-color: var(--color-surface); color: var(--color-text); outline: none; font-family: inherit;"[39m
+            [33mtype[39m=[32m"text"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33mdisabled[39m=[32m""[39m
+            [33mstyle[39m=[32m"width: 44px; height: 44px; border-radius: 50%; background: rgb(203, 213, 225); color: white; border: medium; display: flex; align-items: center; justify-content: center; cursor: not-allowed; flex-shrink: 0; box-shadow: none; font-family: inherit;"[39m
+            [33mtype[39m=[32m"submit"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"18"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"18"[39m
+            [36m>[39m
+              [36m<line[39m
+                [33mx1[39m=[32m"22"[39m
+                [33mx2[39m=[32m"11"[39m
+                [33my1[39m=[32m"2"[39m
+                [33my2[39m=[32m"13"[39m
+              [36m/>[39m
+              [36m<polygon[39m
+                [33mpoints[39m=[32m"22 2 15 22 11 13 2 9 22 2"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</button>[39m
+        [36m</form>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/tests/integration/assistantChat.test.tsx:[2m44:19[22m[39m
+    [90m 42| [39m
+    [90m 43| [39m    [90m// Verify example questions are shown[39m
+    [90m 44| [39m    expect(screen.getByText(/can i afford to hire a new employee/i)).t…
+    [90m   | [39m                  [31m^[39m
+    [90m 45| [39m    expect(screen.getByText(/what are my top expenses this month/i)).t…
+    [90m 46| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/tests/integration/assistantChat.test.tsx[2m > [22mAssistant Chat Interaction Integration Tests[2m > [22mshould handle API errors gracefully
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: /failed/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"padding: var(--space-page); max-width: 900px; margin: 0px auto; height: calc(100vh - 2rem); display: flex; flex-direction: column;"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mstyle[39m=[32m"flex: 1 1 0%; display: flex; flex-direction: column; background-color: var(--color-card); border-radius: var(--radius-xl); box-shadow: var(--shadow-md); overflow: hidden;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"flex: 1 1 0%; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-card) 100%);"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; gap: 10px; align-items: flex-end; animation: slideUp 0.3s ease-out; justify-content: flex-end;"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"max-width: 75%; padding: 12px 16px; border-radius: 16px; background: linear-gradient(135deg, rgb(99, 102, 241), rgb(124, 58, 237)); color: white; border-bottom-right-radius: 4px;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"line-height: 1.6; font-size: 0.9rem;"[39m
+              [36m>[39m
+                [0mWhat are my top expenses this month?[0m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"font-size: 0.65rem; opacity: 0.5; margin-top: 6px; text-align: right;"[39m
+              [36m>[39m
+                [0m02:30 PM[0m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"display: flex; gap: 10px; align-items: flex-end; animation: slideUp 0.3s ease-out; justify-content: flex-start;"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, rgb(99, 102, 241), rgb(139, 92, 246)); display: flex; align-items: center; justify-content: center; flex-shrink: 0;"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"16"[39m
+                [33mstroke[39m=[32m"white"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"16"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M12 2L2 7l10 5 10-5-10-5z"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M2 17l10 5 10-5"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M2 12l10 5 10-5"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"max-width: 75%; padding: 12px 16px; border-radius: 16px; background-color: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); border-bottom-left-radius: 4px;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"line-height: 1.6; font-size: 0.9rem;"[39m
+              [36m>[39m
+                [0mYour top expenses this month are Office Supplies ($2,500), Marketing ($2,000), and Utilities ($1,500).[0m
+                [36m<div[39m
+                  [33mstyle[39m=[32m"margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--color-border);"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mstyle[39m=[32m"display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 8px;"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mheight[39m=[32m"12"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [33mwidth[39m=[32m"12"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"[39m
+                      [36m/>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                    [0mSources[0m
+                  [36m</div>[39m
+                  [36m<button[39m
+                    [33mstyle[39m=[32m"display: inline-flex; align-items: center; padding: 4px 10px; background-color: var(--color-primary); color: white; border: medium; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 4px; font-family: inherit;"[39m
+                  [36m>[39m
+                    [0mTransaction [0m
+                    [0mtxn-1[0m
+                    [0m...[0m
+                  [36m</button>[39m
+                  [36m<button[39m
+                    [33mstyle[39m=[32m"display: inline-flex; align-items: center; padding: 4px 10px; background-color: var(--color-primary); color: white; border: medium; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 4px; font-family: inherit;"[39m
+                  [36m>[39m
+                    [0mTransaction [0m
+                    [0mtxn-4[0m
+                    [0m...[0m
+                  [36m</button>[39m
+                  [36m<button[39m
+                    [33mstyle[39m=[32m"display: inline-flex; align-items: center; padding: 4px 10px; background-color: var(--color-primary); color: white; border: medium; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 4px; font-family: inherit;"[39m
+                  [36m>[39m
+                    [0mTransaction [0m
+                    [0mtxn-7[0m
+                    [0m...[0m
+                  [36m</button>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mstyle[39m=[32m"margin-top: 8px;"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mstyle[39m=[32m"padding: 3px 10px; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; display: inline-block; background-color: var(--color-success-light); color: var(--color-success-dark);"[39m
+                  [36m>[39m
+                    [0m95[0m
+           ...
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mstyle[39m=[32m"padding: var(--space-page); max-width: 900px; margin: 0px auto; height: calc(100vh - 2rem); display: flex; flex-direction: column;"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mstyle[39m=[32m"flex: 1 1 0%; display: flex; flex-direction: column; background-color: var(--color-card); border-radius: var(--radius-xl); box-shadow: var(--shadow-md); overflow: hidden;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mstyle[39m=[32m"flex: 1 1 0%; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-card) 100%);"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"display: flex; gap: 10px; align-items: flex-end; animation: slideUp 0.3s ease-out; justify-content: flex-end;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"max-width: 75%; padding: 12px 16px; border-radius: 16px; background: linear-gradient(135deg, rgb(99, 102, 241), rgb(124, 58, 237)); color: white; border-bottom-right-radius: 4px;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mstyle[39m=[32m"line-height: 1.6; font-size: 0.9rem;"[39m
+                [36m>[39m
+                  [0mWhat are my top expenses this month?[0m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mstyle[39m=[32m"font-size: 0.65rem; opacity: 0.5; margin-top: 6px; text-align: right;"[39m
+                [36m>[39m
+                  [0m02:30 PM[0m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mstyle[39m=[32m"display: flex; gap: 10px; align-items: flex-end; animation: slideUp 0.3s ease-out; justify-content: flex-start;"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, rgb(99, 102, 241), rgb(139, 92, 246)); display: flex; align-items: center; justify-content: center; flex-shrink: 0;"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mheight[39m=[32m"16"[39m
+                  [33mstroke[39m=[32m"white"[39m
+                  [33mstroke-width[39m=[32m"2"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                  [33mwidth[39m=[32m"16"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M12 2L2 7l10 5 10-5-10-5z"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M2 17l10 5 10-5"[39m
+                  [36m/>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M2 12l10 5 10-5"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mstyle[39m=[32m"max-width: 75%; padding: 12px 16px; border-radius: 16px; background-color: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); border-bottom-left-radius: 4px;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mstyle[39m=[32m"line-height: 1.6; font-size: 0.9rem;"[39m
+                [36m>[39m
+                  [0mYour top expenses this month are Office Supplies ($2,500), Marketing ($2,000), and Utilities ($1,500).[0m
+                  [36m<div[39m
+                    [33mstyle[39m=[32m"margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--color-border);"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33mstyle[39m=[32m"display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 8px;"[39m
+                    [36m>[39m
+                      [36m<svg[39m
+                        [33mfill[39m=[32m"none"[39m
+                        [33mheight[39m=[32m"12"[39m
+                        [33mstroke[39m=[32m"currentColor"[39m
+                        [33mstroke-width[39m=[32m"2"[39m
+                        [33mviewBox[39m=[32m"0 0 24 24"[39m
+                        [33mwidth[39m=[32m"12"[39m
+                      [36m>[39m
+                        [36m<path[39m
+                          [33md[39m=[32m"M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"[39m
+                        [36m/>[39m
+                        [36m<path[39m
+                          [33md[39m=[32m"M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"[39m
+                        [36m/>[39m
+                      [36m</svg>[39m
+                      [0mSources[0m
+                    [36m</div>[39m
+                    [36m<button[39m
+                      [33mstyle[39m=[32m"display: inline-flex; align-items: center; padding: 4px 10px; background-color: var(--color-primary); color: white; border: medium; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 4px; font-family: inherit;"[39m
+                    [36m>[39m
+                      [0mTransaction [0m
+                      [0mtxn-1[0m
+                      [0m...[0m
+                    [36m</button>[39m
+                    [36m<button[39m
+                      [33mstyle[39m=[32m"display: inline-flex; align-items: center; padding: 4px 10px; background-color: var(--color-primary); color: white; border: medium; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 4px; font-family: inherit;"[39m
+                    [36m>[39m
+                      [0mTransaction [0m
+                      [0mtxn-4[0m
+                      [0m...[0m
+                    [36m</button>[39m
+                    [36m<button[39m
+                      [33mstyle[39m=[32m"display: inline-flex; align-items: center; padding: 4px 10px; background-color: var(--color-primary); color: white; border: medium; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 4px; font-family: inherit;"[39m
+                    [36m>[39m
+                      [0mTransaction [0m
+                      [0mtxn-7[0m
+                      [0m...[0m
+                    [36m</button>[39m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mstyle[39m=[32m"margin-top: 8px;"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mstyle[39m=[32m"padding: 3px...
+[90m [2m❯[22m waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[36m [2m❯[22m src/tests/integration/assistantChat.test.tsx:[2m268:11[22m[39m
+    [90m266| [39m
+    [90m267| [39m    [90m// Verify error message appears[39m
+    [90m268| [39m    [35mawait[39m [34mwaitFor[39m(() [33m=>[39m {
+    [90m   | [39m          [31m^[39m
+    [90m269| [39m      [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/failed/i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m270| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 22:44:18
+[2m   Duration [22m 5.39s[2m (transform 160ms, setup 288ms, import 219ms, tests 4.14s, environment 600ms)[22m
+

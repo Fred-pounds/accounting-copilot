@@ -1,0 +1,32 @@
+MICHELIN TIRE DISTRIBUTORS
+Northwest Distribution Center
+1200 Warehouse Blvd, Seattle, WA 98115
+Phone: (206) 555-TIRE
+www.michelintrade.com
+
+INVOICE #TY5678
+Date: January 12, 2024
+Terms: Net 30
+
+BILL TO:
+AutoFix Repair Shop
+123 Main Street
+Seattle, WA 98101
+Account #: MT-45678
+
+ITEMS ORDERED:
+Part Number    Description                    Qty    Price     Total
+--------------------------------------------------------------------
+23456          LTX M/S2 LT265/70R17           16  $145.00  $2,320.00
+34567          Defender T+H 225/65R17         12  $128.00  $1,536.00
+45678          Primacy Tour A/S 235/50R18      8  $152.00  $1,216.00
+TDF-100        Tire Disposal Fee               36    $3.00    $108.00
+
+                                          Subtotal:        $5,180.00
+                                          Sales Tax (10%):   $518.00
+                                          TOTAL DUE:       $5,698.00
+
+Payment Due: February 11, 2024
+Payment Method: Account Credit
+
+Thank you for your business!

@@ -1,0 +1,36 @@
+OFFICE DEPOT
+Store #2341
+890 Office Park Drive, Seattle, WA 98101
+Phone: (206) 555-DESK
+www.officedepot.com
+
+INVOICE #OD-789456
+Date: February 12, 2024
+Terms: Net 30
+
+BILL TO:
+AutoFix Repair Shop
+123 Main Street
+Seattle, WA 98101
+Account #: 456789
+
+ITEMS ORDERED:
+Item Number    Description                    Qty    Price     Total
+--------------------------------------------------------------------
+123456         Copy Paper (10 reams)           10   $42.50    $425.00
+234567         Ink Cartridges - HP              4   $38.95    $155.80
+345678         File Folders (Box of 100)        2   $18.50     $37.00
+456789         Pens - Black (Box of 12)         3    $9.95     $29.85
+567890         Stapler & Staples                2   $15.50     $31.00
+678901         Desk Calendar 2024               4   $12.95     $51.80
+789012         Invoice Books (3-part)           5   $24.50    $122.50
+890123         Cleaning Supplies                1   $45.00     $45.00
+
+                                          Subtotal:          $897.95
+                                          Sales Tax (10%):    $89.80
+                                          TOTAL DUE:         $987.75
+
+Payment Due: March 13, 2024
+Payment Method: Business Credit Card
+
+Thank you for your business!

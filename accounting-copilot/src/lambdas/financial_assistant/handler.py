@@ -4,6 +4,7 @@ Conversational AI for answering financial questions.
 """
 
 import json
+import os
 import re
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
@@ -38,7 +39,7 @@ def query_relevant_transactions(user_id: str, question: str, limit: int = 50) ->
     
     # Determine date range based on question keywords
     end_date = datetime.utcnow()
-    start_date = end_date - timedelta(days=90)  # Default: last 3 months
+    start_date = end_date - timedelta(days=365 * 10)  # Default: last 10 years (to catch all transactions)
     
     # Adjust date range based on question
     question_lower = question.lower()
@@ -55,6 +56,7 @@ def query_relevant_transactions(user_id: str, question: str, limit: int = 50) ->
     
     # Query transactions
     try:
+        logger.info(f"Querying transactions for user: {user_id}")
         response = table.query(
             KeyConditionExpression='PK = :pk AND begins_with(SK, :sk)',
             ExpressionAttributeValues={
@@ -65,6 +67,7 @@ def query_relevant_transactions(user_id: str, question: str, limit: int = 50) ->
         )
         
         transactions = response.get('Items', [])
+        logger.info(f"Query returned {len(transactions)} transactions")
         
         # Filter by date range
         start_date_str = start_date.strftime('%Y-%m-%d')
@@ -75,7 +78,7 @@ def query_relevant_transactions(user_id: str, question: str, limit: int = 50) ->
             if start_date_str <= txn.get('date', '') <= end_date_str
         ]
         
-        logger.info(f"Retrieved {len(filtered_transactions)} transactions for context")
+        logger.info(f"Retrieved {len(filtered_transactions)} transactions for context (filtered from {len(transactions)} by date range {start_date_str} to {end_date_str})")
         return filtered_transactions
         
     except Exception as e:
@@ -234,39 +237,37 @@ Provide a clear answer in plain language. Cite specific transactions or data poi
 
 def call_bedrock(prompt: str) -> Dict[str, Any]:
     """
-    Call Bedrock Claude 3 Haiku model.
-    
-    Args:
-        prompt: The prompt to send
-        
-    Returns:
-        Response from Bedrock
+    Call DeepInfra model via OpenAI-compatible API.
     """
-    try:
-        request_body = {
-            'anthropic_version': 'bedrock-2023-05-31',
-            'max_tokens': 1000,
-            'messages': [
-                {
-                    'role': 'user',
-                    'content': prompt
-                }
-            ],
-            'temperature': 0.7
+    import urllib.request as urlreq
+    
+    api_key = os.environ.get('DEEPINFRA_API_KEY', '')
+    model = Config.BEDROCK_MODEL_ID  # reusing config field for model name
+    
+    payload = json.dumps({
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 1000,
+        "temperature": 0.7
+    }).encode()
+    
+    req = urlreq.Request(
+        "https://api.deepinfra.com/v1/openai/chat/completions",
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
         }
-        
-        response = bedrock_runtime.invoke_model(
-            modelId=Config.BEDROCK_MODEL_ID,
-            body=json.dumps(request_body)
-        )
-        
-        response_body = json.loads(response['body'].read())
-        
-        logger.info("Successfully called Bedrock")
-        return response_body
-        
+    )
+    
+    try:
+        with urlreq.urlopen(req, timeout=30) as resp:
+            result = json.loads(resp.read())
+            text = result['choices'][0]['message']['content']
+            logger.info("Successfully called DeepInfra")
+            return {"content": [{"type": "text", "text": text}]}
     except Exception as e:
-        logger.error(f"Error calling Bedrock: {e}")
+        logger.error(f"Error calling DeepInfra: {e}")
         raise AppError(f"Failed to generate response: {str(e)}")
 
 
@@ -364,7 +365,7 @@ def store_conversation_message(user_id: str, conversation_id: str, question: str
         response={
             'content': answer,
             'citations': citations,
-            'confidence': confidence
+            'confidence': Decimal(str(confidence))
         }
     )
     
@@ -419,10 +420,19 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         # Check for insufficient data
         insufficient_data_msg = check_insufficient_data(transactions, question)
         if insufficient_data_msg:
+            message_id = generate_id('msg')
+            timestamp = generate_timestamp()
+            
             response_data = {
-                'answer': insufficient_data_msg,
-                'citations': [],
-                'confidence': 1.0,
+                'message_id': message_id,
+                'timestamp': timestamp,
+                'role': 'assistant',
+                'content': insufficient_data_msg,
+                'response': {
+                    'content': insufficient_data_msg,
+                    'citations': [],
+                    'confidence': 1.0
+                },
                 'conversation_id': conversation_id
             }
             
@@ -471,10 +481,20 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         # Calculate confidence (simplified - based on presence of citations)
         confidence = 0.9 if citations else 0.7
         
+        # Create response in the format expected by frontend
+        message_id = generate_id('msg')
+        timestamp = generate_timestamp()
+        
         response_data = {
-            'answer': answer,
-            'citations': citations,
-            'confidence': confidence,
+            'message_id': message_id,
+            'timestamp': timestamp,
+            'role': 'assistant',
+            'content': answer,
+            'response': {
+                'content': answer,
+                'citations': citations,
+                'confidence': confidence
+            },
             'conversation_id': conversation_id
         }
         

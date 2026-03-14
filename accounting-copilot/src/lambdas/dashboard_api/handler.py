@@ -73,7 +73,20 @@ def calculate_dashboard_data(user_id: str, repository: DynamoDBRepository = None
     current_month_expenses = Decimal('0')
     current_month_category_totals = defaultdict(Decimal)
     
+    # Also calculate all-time totals as fallback
+    all_time_income = Decimal('0')
+    all_time_expenses = Decimal('0')
+    all_time_category_totals = defaultdict(Decimal)
+    
     for txn in all_transactions:
+        # All-time totals
+        if txn.type == 'income':
+            all_time_income += Decimal(str(txn.amount))
+        elif txn.type == 'expense':
+            all_time_expenses += Decimal(str(txn.amount))
+            all_time_category_totals[txn.category] += Decimal(str(txn.amount))
+        
+        # Current month totals
         if txn.date >= current_month_start and txn.date <= current_month_end:
             if txn.type == 'income':
                 current_month_income += Decimal(str(txn.amount))
@@ -81,29 +94,28 @@ def calculate_dashboard_data(user_id: str, repository: DynamoDBRepository = None
                 current_month_expenses += Decimal(str(txn.amount))
                 current_month_category_totals[txn.category] += Decimal(str(txn.amount))
     
-    # Calculate monthly profit for last 6 months
+    # Use current month if available, otherwise use all-time
+    display_income = current_month_income if current_month_income > 0 or current_month_expenses > 0 else all_time_income
+    display_expenses = current_month_expenses if current_month_income > 0 or current_month_expenses > 0 else all_time_expenses
+    display_category_totals = current_month_category_totals if current_month_category_totals else all_time_category_totals
+    
+    # Calculate monthly profit for last 12 months of actual data
     monthly_data = defaultdict(lambda: {'income': Decimal('0'), 'expenses': Decimal('0')})
     
     for txn in all_transactions:
-        if txn.date >= six_months_start:
-            # Extract year-month from date
-            month_key = txn.date[:7]  # YYYY-MM format
-            
-            if txn.type == 'income':
-                monthly_data[month_key]['income'] += Decimal(str(txn.amount))
-            elif txn.type == 'expense':
-                monthly_data[month_key]['expenses'] += Decimal(str(txn.amount))
+        month_key = txn.date[:7]  # YYYY-MM format
+        if txn.type == 'income':
+            monthly_data[month_key]['income'] += Decimal(str(txn.amount))
+        elif txn.type == 'expense':
+            monthly_data[month_key]['expenses'] += Decimal(str(txn.amount))
     
-    # Generate profit trend for last 6 months
+    # Build profit trend from actual data months (sorted, last 6)
+    sorted_months = sorted(monthly_data.keys())[-6:]
     profit_trend = []
-    for i in range(6):
-        month_date = now - timedelta(days=30 * i)
-        month_key = month_date.strftime('%Y-%m')
-        
+    for month_key in sorted_months:
         income = monthly_data[month_key]['income']
         expenses = monthly_data[month_key]['expenses']
         profit = income - expenses
-        
         profit_trend.append({
             'month': month_key,
             'income': float(income),
@@ -111,21 +123,18 @@ def calculate_dashboard_data(user_id: str, repository: DynamoDBRepository = None
             'profit': float(profit)
         })
     
-    # Reverse to get chronological order (oldest to newest)
-    profit_trend.reverse()
-    
-    # Get top 5 expense categories for current month
+    # Get top 5 expense categories
     top_categories = sorted(
         [{'category': cat, 'total': float(total)} 
-         for cat, total in current_month_category_totals.items()],
+         for cat, total in display_category_totals.items()],
         key=lambda x: x['total'],
         reverse=True
     )[:5]
     
     return {
         'cash_balance': float(cash_balance),
-        'total_income': float(current_month_income),
-        'total_expenses': float(current_month_expenses),
+        'total_income': float(display_income),
+        'total_expenses': float(display_expenses),
         'profit_trend': profit_trend,
         'top_categories': top_categories
     }

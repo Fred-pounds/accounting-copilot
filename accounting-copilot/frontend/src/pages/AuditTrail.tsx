@@ -60,7 +60,13 @@ export const AuditTrail: React.FC = () => {
   if (isLoading) {
     return (
       <div style={styles.container}>
-        <div style={styles.loading}>Loading audit trail...</div>
+        <h1 style={styles.title}>Audit Trail</h1>
+        <div style={styles.loadingWrap}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}>
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+          <span style={{ color: 'var(--color-text-muted)' }}>Loading audit trail...</span>
+        </div>
       </div>
     );
   }
@@ -68,8 +74,16 @@ export const AuditTrail: React.FC = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h1 style={styles.title}>Audit Trail</h1>
+        <div>
+          <h1 style={styles.title}>Audit Trail</h1>
+          <p style={styles.headerSub}>Track all AI actions and user activities</p>
+        </div>
         <button onClick={handleExport} style={styles.exportButton}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
           Export CSV
         </button>
       </div>
@@ -77,7 +91,7 @@ export const AuditTrail: React.FC = () => {
       {/* Filters */}
       <div style={styles.filters}>
         <div style={styles.filterGroup}>
-          <label style={styles.filterLabel}>Start Date:</label>
+          <label style={styles.filterLabel}>Start Date</label>
           <input
             type="date"
             value={startDate}
@@ -87,7 +101,7 @@ export const AuditTrail: React.FC = () => {
         </div>
 
         <div style={styles.filterGroup}>
-          <label style={styles.filterLabel}>End Date:</label>
+          <label style={styles.filterLabel}>End Date</label>
           <input
             type="date"
             value={endDate}
@@ -97,13 +111,13 @@ export const AuditTrail: React.FC = () => {
         </div>
 
         <div style={styles.filterGroup}>
-          <label style={styles.filterLabel}>Action Type:</label>
+          <label style={styles.filterLabel}>Action Type</label>
           <select
             value={actionTypeFilter}
             onChange={(e) => setActionTypeFilter(e.target.value)}
             style={styles.select}
           >
-            <option value="">All</option>
+            <option value="">All Actions</option>
             <option value="classification">Classification</option>
             <option value="reconciliation">Reconciliation</option>
             <option value="assistant_query">Assistant Query</option>
@@ -114,22 +128,31 @@ export const AuditTrail: React.FC = () => {
         </div>
 
         <div style={styles.filterGroup}>
-          <label style={styles.filterLabel}>Transaction ID:</label>
+          <label style={styles.filterLabel}>Transaction ID</label>
           <input
             type="text"
             value={transactionIdFilter}
             onChange={(e) => setTransactionIdFilter(e.target.value)}
-            placeholder="Filter by transaction"
+            placeholder="Filter by ID..."
             style={styles.input}
           />
         </div>
 
         <button onClick={loadAuditTrail} style={styles.applyButton}>
-          Apply Filters
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+            <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+          </svg>
+          Apply
         </button>
       </div>
 
-      {error && <div style={styles.error}>{error}</div>}
+      {error && (
+        <div style={styles.error}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
+          {error}
+        </div>
+      )}
 
       {/* Audit Entries Table */}
       <div style={styles.tableContainer}>
@@ -148,41 +171,42 @@ export const AuditTrail: React.FC = () => {
             {entries.map((entry) => (
               <tr key={entry.action_id} style={styles.tr}>
                 <td style={styles.td}>
-                  {new Date(entry.timestamp).toLocaleString()}
+                  <span style={styles.timestamp}>
+                    {new Date(entry.timestamp).toLocaleString()}
+                  </span>
                 </td>
                 <td style={styles.td}>
                   <span style={styles.actionType}>
-                    {entry.action_type.replace('_', ' ')}
+                    {entry.action_type.replace(/_/g, ' ')}
                   </span>
                 </td>
                 <td style={styles.td}>
                   <span
                     style={{
-                      ...styles.badge,
-                      backgroundColor: entry.actor === 'ai' ? '#d1ecf1' : '#d4edda',
-                      color: entry.actor === 'ai' ? '#0c5460' : '#155724',
+                      ...styles.actorBadge,
+                      backgroundColor: entry.actor === 'ai' ? 'var(--color-info-light)' : 'var(--color-success-light)',
+                      color: entry.actor === 'ai' ? '#0369a1' : 'var(--color-success-dark)',
                     }}
                   >
-                    {entry.actor}
+                    {entry.actor === 'ai' ? '🤖' : '👤'} {entry.actor}
                   </span>
                   {entry.actor_details && (
                     <div style={styles.actorDetails}>{entry.actor_details}</div>
                   )}
                 </td>
                 <td style={styles.td}>
-                  <div>{entry.subject_type}</div>
+                  <div style={styles.subjectType}>{entry.subject_type}</div>
                   <div style={styles.subjectId}>{entry.subject_id}</div>
                 </td>
                 <td style={styles.td}>
                   <span
                     style={{
-                      ...styles.badge,
-                      backgroundColor:
-                        entry.result === 'success' ? '#d4edda' : '#f8d7da',
-                      color: entry.result === 'success' ? '#155724' : '#721c24',
+                      ...styles.resultBadge,
+                      backgroundColor: entry.result === 'success' ? 'var(--color-success-light)' : 'var(--color-danger-light)',
+                      color: entry.result === 'success' ? 'var(--color-success-dark)' : 'var(--color-danger-dark)',
                     }}
                   >
-                    {entry.result}
+                    {entry.result === 'success' ? '✓' : '✕'} {entry.result}
                   </span>
                 </td>
                 <td style={styles.td}>
@@ -190,7 +214,7 @@ export const AuditTrail: React.FC = () => {
                     onClick={() => setSelectedEntry(entry)}
                     style={styles.viewButton}
                   >
-                    View Details
+                    Details
                   </button>
                 </td>
               </tr>
@@ -199,7 +223,14 @@ export const AuditTrail: React.FC = () => {
         </table>
 
         {entries.length === 0 && (
-          <div style={styles.emptyState}>No audit entries found</div>
+          <div style={styles.emptyState}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="1.5">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            <p style={styles.emptyTitle}>No audit entries found</p>
+            <p style={styles.emptyText}>Try adjusting your filter criteria</p>
+          </div>
         )}
       </div>
 
@@ -209,54 +240,46 @@ export const AuditTrail: React.FC = () => {
           <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div style={styles.modalHeader}>
               <h2 style={styles.modalTitle}>Audit Entry Details</h2>
-              <button
-                onClick={() => setSelectedEntry(null)}
-                style={styles.closeButton}
-              >
-                ×
+              <button onClick={() => setSelectedEntry(null)} style={styles.closeButton}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
               </button>
             </div>
 
             <div style={styles.modalContent}>
-              <div style={styles.detailField}>
-                <span style={styles.detailLabel}>Action ID:</span>
-                <span style={styles.detailValue}>{selectedEntry.action_id}</span>
+              <div style={styles.modalField}>
+                <span style={styles.modalLabel}>Action ID</span>
+                <span style={styles.modalValueMono}>{selectedEntry.action_id}</span>
               </div>
-              <div style={styles.detailField}>
-                <span style={styles.detailLabel}>Timestamp:</span>
-                <span style={styles.detailValue}>
-                  {new Date(selectedEntry.timestamp).toLocaleString()}
+              <div style={styles.modalField}>
+                <span style={styles.modalLabel}>Timestamp</span>
+                <span style={styles.modalValue}>{new Date(selectedEntry.timestamp).toLocaleString()}</span>
+              </div>
+              <div style={styles.modalField}>
+                <span style={styles.modalLabel}>Action Type</span>
+                <span style={{ ...styles.modalValue, textTransform: 'capitalize' }}>{selectedEntry.action_type.replace(/_/g, ' ')}</span>
+              </div>
+              <div style={styles.modalField}>
+                <span style={styles.modalLabel}>Actor</span>
+                <span style={styles.modalValue}>
+                  {selectedEntry.actor}{selectedEntry.actor_details && ` (${selectedEntry.actor_details})`}
                 </span>
               </div>
-              <div style={styles.detailField}>
-                <span style={styles.detailLabel}>Action Type:</span>
-                <span style={styles.detailValue}>
-                  {selectedEntry.action_type.replace('_', ' ')}
-                </span>
+              <div style={styles.modalField}>
+                <span style={styles.modalLabel}>Subject Type</span>
+                <span style={styles.modalValue}>{selectedEntry.subject_type}</span>
               </div>
-              <div style={styles.detailField}>
-                <span style={styles.detailLabel}>Actor:</span>
-                <span style={styles.detailValue}>
-                  {selectedEntry.actor}
-                  {selectedEntry.actor_details && ` (${selectedEntry.actor_details})`}
-                </span>
+              <div style={styles.modalField}>
+                <span style={styles.modalLabel}>Subject ID</span>
+                <span style={styles.modalValueMono}>{selectedEntry.subject_id}</span>
               </div>
-              <div style={styles.detailField}>
-                <span style={styles.detailLabel}>Subject Type:</span>
-                <span style={styles.detailValue}>{selectedEntry.subject_type}</span>
-              </div>
-              <div style={styles.detailField}>
-                <span style={styles.detailLabel}>Subject ID:</span>
-                <span style={styles.detailValue}>{selectedEntry.subject_id}</span>
-              </div>
-              <div style={styles.detailField}>
-                <span style={styles.detailLabel}>Result:</span>
-                <span style={styles.detailValue}>{selectedEntry.result}</span>
+              <div style={styles.modalField}>
+                <span style={styles.modalLabel}>Result</span>
+                <span style={styles.modalValue}>{selectedEntry.result}</span>
               </div>
 
               {Object.keys(selectedEntry.action_details).length > 0 && (
                 <div style={styles.detailsSection}>
-                  <div style={styles.detailLabel}>Action Details:</div>
+                  <span style={styles.modalLabel}>Action Details</span>
                   <pre style={styles.detailsJson}>
                     {JSON.stringify(selectedEntry.action_details, null, 2)}
                   </pre>
@@ -265,10 +288,7 @@ export const AuditTrail: React.FC = () => {
             </div>
 
             <div style={styles.modalFooter}>
-              <button
-                onClick={() => setSelectedEntry(null)}
-                style={styles.closeModalButton}
-              >
+              <button onClick={() => setSelectedEntry(null)} style={styles.closeModalButton}>
                 Close
               </button>
             </div>
@@ -281,139 +301,220 @@ export const AuditTrail: React.FC = () => {
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    padding: '2rem',
+    padding: 'var(--space-page)',
     maxWidth: '1400px',
     margin: '0 auto',
   },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '1.5rem',
+    alignItems: 'flex-start',
+    marginBottom: '20px',
   },
   title: {
-    fontSize: '1.875rem',
-    fontWeight: 'bold',
+    fontSize: '1.75rem',
+    fontWeight: 800,
+    color: 'var(--color-text)',
+    letterSpacing: '-0.5px',
+  },
+  headerSub: {
+    fontSize: '0.85rem',
+    color: 'var(--color-text-muted)',
+    marginTop: '4px',
   },
   exportButton: {
-    padding: '0.75rem 1.5rem',
-    backgroundColor: '#28a745',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '10px 18px',
+    backgroundColor: 'var(--color-success)',
     color: 'white',
     border: 'none',
-    borderRadius: '4px',
-    fontSize: '1rem',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.85rem',
+    fontWeight: 600,
     cursor: 'pointer',
+    fontFamily: 'inherit',
   },
-  loading: {
-    textAlign: 'center',
-    padding: '3rem',
-    fontSize: '1.125rem',
-    color: '#666',
+  loadingWrap: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '12px',
+    padding: '4rem',
   },
   error: {
-    backgroundColor: '#fee',
-    color: '#c33',
-    padding: '1rem',
-    borderRadius: '8px',
-    marginBottom: '1rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    backgroundColor: 'var(--color-danger-light)',
+    color: 'var(--color-danger)',
+    padding: '12px 16px',
+    borderRadius: 'var(--radius-lg)',
+    marginBottom: '16px',
+    fontSize: '0.85rem',
+    fontWeight: 500,
   },
   filters: {
     display: 'flex',
-    gap: '1rem',
-    marginBottom: '1.5rem',
+    gap: '12px',
+    marginBottom: '20px',
     flexWrap: 'wrap',
     alignItems: 'flex-end',
+    padding: '16px 20px',
+    backgroundColor: 'var(--color-card)',
+    borderRadius: 'var(--radius-lg)',
+    boxShadow: 'var(--shadow-xs)',
   },
   filterGroup: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '0.25rem',
+    gap: '4px',
   },
   filterLabel: {
-    fontSize: '0.875rem',
-    fontWeight: '500',
+    fontSize: '0.7rem',
+    fontWeight: 600,
+    color: 'var(--color-text-muted)',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.5px',
   },
   select: {
-    padding: '0.5rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '0.875rem',
-  },
-  input: {
-    padding: '0.5rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '0.875rem',
-  },
-  applyButton: {
-    padding: '0.5rem 1rem',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '0.875rem',
+    padding: '8px 12px',
+    border: '1.5px solid var(--color-border)',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.85rem',
+    backgroundColor: 'var(--color-surface)',
+    color: 'var(--color-text)',
+    outline: 'none',
+    fontFamily: 'inherit',
     cursor: 'pointer',
   },
+  input: {
+    padding: '8px 12px',
+    border: '1.5px solid var(--color-border)',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.85rem',
+    backgroundColor: 'var(--color-surface)',
+    color: 'var(--color-text)',
+    outline: 'none',
+    fontFamily: 'inherit',
+  },
+  applyButton: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '8px 16px',
+    backgroundColor: 'var(--color-primary)',
+    color: 'white',
+    border: 'none',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.85rem',
+    fontWeight: 600,
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+  },
   tableContainer: {
-    backgroundColor: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'var(--color-card)',
+    borderRadius: 'var(--radius-lg)',
+    boxShadow: 'var(--shadow-sm)',
     overflow: 'auto',
+    animation: 'fadeIn 0.3s ease-out',
   },
   table: {
     width: '100%',
     borderCollapse: 'collapse',
   },
   th: {
-    padding: '1rem',
+    padding: '14px 16px',
     textAlign: 'left',
-    borderBottom: '2px solid #ddd',
-    fontWeight: '600',
-    fontSize: '0.875rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.5px',
+    borderBottom: '2px solid var(--color-border)',
+    fontWeight: 600,
+    fontSize: '0.75rem',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.7px',
+    color: 'var(--color-text-muted)',
   },
   tr: {
-    borderBottom: '1px solid #f0f0f0',
+    borderBottom: '1px solid var(--color-border-light)',
+    transition: 'background-color var(--transition-fast)',
   },
   td: {
-    padding: '1rem',
+    padding: '14px 16px',
     fontSize: '0.875rem',
+  },
+  timestamp: {
+    fontSize: '0.8rem',
+    color: 'var(--color-text-secondary)',
   },
   actionType: {
-    textTransform: 'capitalize',
-    fontWeight: '500',
+    textTransform: 'capitalize' as const,
+    fontWeight: 600,
+    color: 'var(--color-text)',
+    fontSize: '0.85rem',
   },
-  badge: {
-    padding: '0.25rem 0.5rem',
-    borderRadius: '4px',
+  actorBadge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '4px',
+    padding: '3px 10px',
+    borderRadius: 'var(--radius-full)',
     fontSize: '0.75rem',
-    fontWeight: '500',
-    textTransform: 'uppercase',
+    fontWeight: 600,
+    textTransform: 'uppercase' as const,
   },
   actorDetails: {
-    fontSize: '0.75rem',
-    color: '#999',
-    marginTop: '0.25rem',
+    fontSize: '0.7rem',
+    color: 'var(--color-text-muted)',
+    marginTop: '4px',
+  },
+  subjectType: {
+    fontWeight: 600,
+    fontSize: '0.85rem',
+    color: 'var(--color-text)',
   },
   subjectId: {
-    fontSize: '0.75rem',
-    color: '#999',
+    fontSize: '0.7rem',
+    color: 'var(--color-text-muted)',
     fontFamily: 'monospace',
+    marginTop: '2px',
+  },
+  resultBadge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '4px',
+    padding: '3px 10px',
+    borderRadius: 'var(--radius-full)',
+    fontSize: '0.75rem',
+    fontWeight: 600,
+    textTransform: 'capitalize' as const,
   },
   viewButton: {
-    padding: '0.375rem 0.75rem',
-    backgroundColor: '#007bff',
+    padding: '6px 14px',
+    backgroundColor: 'var(--color-primary)',
     color: 'white',
     border: 'none',
-    borderRadius: '4px',
-    fontSize: '0.875rem',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.8rem',
+    fontWeight: 600,
     cursor: 'pointer',
+    fontFamily: 'inherit',
   },
   emptyState: {
     textAlign: 'center',
-    padding: '3rem',
-    color: '#999',
+    padding: '4rem 2rem',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  emptyTitle: {
+    fontSize: '1.1rem',
+    fontWeight: 700,
+    color: 'var(--color-text)',
+  },
+  emptyText: {
+    color: 'var(--color-text-muted)',
+    fontSize: '0.85rem',
   },
   overlay: {
     position: 'fixed',
@@ -421,81 +522,103 @@ const styles: Record<string, React.CSSProperties> = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    backdropFilter: 'blur(4px)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
   },
   modal: {
-    backgroundColor: 'white',
-    borderRadius: '8px',
+    backgroundColor: 'var(--color-card)',
+    borderRadius: 'var(--radius-xl)',
     width: '90%',
-    maxWidth: '700px',
+    maxWidth: '600px',
     maxHeight: '90vh',
     overflow: 'auto',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    boxShadow: 'var(--shadow-xl)',
+    animation: 'scaleIn 0.2s ease-out',
   },
   modalHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '1.5rem',
-    borderBottom: '1px solid #ddd',
+    padding: '20px 24px',
+    borderBottom: '1px solid var(--color-border)',
   },
   modalTitle: {
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
+    fontSize: '1.2rem',
+    fontWeight: 800,
+    color: 'var(--color-text)',
     margin: 0,
   },
   closeButton: {
     background: 'none',
     border: 'none',
-    fontSize: '2rem',
+    color: 'var(--color-text-muted)',
     cursor: 'pointer',
-    color: '#999',
-    lineHeight: 1,
+    padding: '4px',
+    display: 'flex',
+    borderRadius: 'var(--radius-md)',
   },
   modalContent: {
-    padding: '1.5rem',
+    padding: '24px',
   },
-  detailField: {
+  modalField: {
     display: 'flex',
-    marginBottom: '1rem',
-    gap: '0.5rem',
+    flexDirection: 'column',
+    gap: '2px',
+    marginBottom: '16px',
   },
-  detailLabel: {
-    fontWeight: '600',
-    minWidth: '140px',
-    color: '#666',
+  modalLabel: {
+    fontWeight: 600,
+    color: 'var(--color-text-muted)',
+    fontSize: '0.75rem',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.5px',
   },
-  detailValue: {
-    flex: 1,
+  modalValue: {
+    fontSize: '0.95rem',
+    color: 'var(--color-text)',
+    fontWeight: 500,
+  },
+  modalValueMono: {
+    fontSize: '0.85rem',
+    color: 'var(--color-text-secondary)',
+    fontFamily: 'monospace',
   },
   detailsSection: {
-    marginTop: '1.5rem',
+    marginTop: '8px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
   },
   detailsJson: {
-    backgroundColor: '#f5f5f5',
-    padding: '1rem',
-    borderRadius: '4px',
+    backgroundColor: 'var(--color-surface)',
+    padding: '14px',
+    borderRadius: 'var(--radius-md)',
     overflow: 'auto',
-    fontSize: '0.875rem',
+    fontSize: '0.8rem',
     fontFamily: 'monospace',
+    color: 'var(--color-text-secondary)',
+    border: '1px solid var(--color-border)',
+    margin: 0,
   },
   modalFooter: {
     display: 'flex',
     justifyContent: 'flex-end',
-    padding: '1.5rem',
-    borderTop: '1px solid #ddd',
+    padding: '16px 24px',
+    borderTop: '1px solid var(--color-border)',
   },
   closeModalButton: {
-    padding: '0.75rem 1.5rem',
-    backgroundColor: '#6c757d',
+    padding: '10px 20px',
+    backgroundColor: 'var(--color-text-secondary)',
     color: 'white',
     border: 'none',
-    borderRadius: '4px',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.85rem',
+    fontWeight: 600,
     cursor: 'pointer',
-    fontSize: '0.875rem',
+    fontFamily: 'inherit',
   },
 };

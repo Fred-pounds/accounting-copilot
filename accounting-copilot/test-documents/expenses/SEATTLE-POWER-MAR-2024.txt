@@ -1,0 +1,36 @@
+SEATTLE CITY LIGHT
+Electric Utility Services
+700 Fifth Avenue, Seattle, WA 98104
+Customer Service: (206) 684-3000
+www.seattle.gov/light
+
+ELECTRIC BILL
+Account Number: 1234-5678-90
+Service Period: February 15, 2024 - March 14, 2024
+Bill Date: March 18, 2024
+Due Date: April 7, 2024
+
+SERVICE ADDRESS:
+AutoFix Repair Shop
+123 Main Street
+Seattle, WA 98101
+
+USAGE SUMMARY:
+Current Reading: 51,120 kWh
+Previous Reading: 48,450 kWh
+Usage: 2,670 kWh
+
+CHARGES:
+Description                              Amount
+------------------------------------------------
+Energy Charge (2,670 kWh @ $0.11)       $293.70
+Basic Service Charge                     $25.00
+City Light Tax                           $15.68
+State Utility Tax                        $12.72
+
+                            TOTAL DUE:   $347.10
+
+Payment Method: Auto-Pay (Bank Account)
+Payment Status: PAID - March 20, 2024
+
+Thank you for using Seattle City Light.

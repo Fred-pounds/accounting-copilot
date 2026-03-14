@@ -1,0 +1,40 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-008
+Date: February 5, 2024
+Due Date: February 20, 2024
+
+BILL TO:
+David Thompson
+234 Birch Avenue
+Seattle, WA 98107
+Phone: (206) 555-3456
+
+VEHICLE INFORMATION:
+Year: 2015
+Make: Nissan
+Model: Altima
+VIN: 1N4AL3AP5FC123456
+Mileage: 82,340
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Transmission Service                  1   $189.00   $189.00
+Transmission Fluid (ATF)              1    $95.00    $95.00
+Transmission Filter                   1    $45.00    $45.00
+Labor (2.5 hours @ $95/hr)          2.5    $95.00   $237.50
+
+                                    Subtotal:        $566.50
+                                    Sales Tax (10%):  $56.65
+                                    TOTAL DUE:       $623.15
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: Transmission shifting smoothly. Recommend service every 30,000 miles.
+
+Thank you for your business!

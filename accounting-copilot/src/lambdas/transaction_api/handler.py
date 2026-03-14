@@ -541,6 +541,8 @@ def lambda_handler_delete(event: Dict[str, Any], context: Any) -> Dict[str, Any]
 def lambda_handler_approve(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """
     Approve a flagged transaction.
+    POST /transactions with action=approve and transaction_id in body
+    OR
     POST /transactions/{id}/approve
     
     Args:
@@ -558,8 +560,16 @@ def lambda_handler_approve(event: Dict[str, Any], context: Any) -> Dict[str, Any
         # Extract and validate token
         user_id = authorize_and_extract_user(event)
         
-        # Get transaction ID from path
-        transaction_id = event.get('pathParameters', {}).get('id')
+        # Get transaction ID from path or body
+        transaction_id = None
+        if event.get('pathParameters'):
+            transaction_id = event.get('pathParameters', {}).get('id')
+        
+        if not transaction_id:
+            # Try to get from body
+            body = json.loads(event.get('body', '{}'))
+            transaction_id = body.get('transaction_id')
+        
         if not transaction_id:
             raise ValidationError("Transaction ID is required")
         
@@ -577,18 +587,16 @@ def lambda_handler_approve(event: Dict[str, Any], context: Any) -> Dict[str, Any
         # Log write access
         log_write_access(user_id, 'approve', 'transaction', transaction_id)
         
-        # Update transaction status
+        # Update transaction status and GSI2 keys to reflect new status
         updates = {
             'status': 'approved',
             'flagged_for_review': False,
             'approved_by': 'user',
             'approved_at': generate_timestamp(),
-            'updated_at': generate_timestamp()
+            'updated_at': generate_timestamp(),
+            'GSI2PK': generate_status_gsi2pk(user_id, 'approved'),
+            'GSI2SK': generate_date_gsi2sk(existing.date)
         }
-        
-        # Remove GSI2 keys since status is no longer pending
-        # Note: DynamoDB doesn't support removing attributes in update_item easily
-        # We'll just update the status and let the GSI2 keys remain
         
         updated_transaction = repository.update_transaction(user_id, transaction_id, updates)
         
@@ -634,18 +642,24 @@ def lambda_handler_correct(event: Dict[str, Any], context: Any) -> Dict[str, Any
         # Extract and validate token
         user_id = authorize_and_extract_user(event)
         
-        # Get transaction ID from path
-        transaction_id = event.get('pathParameters', {}).get('id')
-        if not transaction_id:
-            raise ValidationError("Transaction ID is required")
-        
         # Parse request body
         body = json.loads(event.get('body', '{}'))
         
-        if 'new_category' not in body:
-            raise ValidationError("new_category is required")
+        # Get transaction ID from path parameters or body
+        transaction_id = None
+        if event.get('pathParameters'):
+            transaction_id = event.get('pathParameters', {}).get('id')
+        if not transaction_id and body:
+            transaction_id = body.get('transaction_id')
         
-        new_category = body['new_category']
+        if not transaction_id:
+            raise ValidationError("Transaction ID is required")
+        
+        # Get category from body (support both new_category and category)
+        new_category = body.get('new_category') or body.get('category')
+        if not new_category:
+            raise ValidationError("category is required")
+        
         reason = body.get('reason', 'User correction')
         
         # Get repository

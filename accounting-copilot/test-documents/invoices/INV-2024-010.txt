@@ -1,0 +1,40 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-010
+Date: February 14, 2024
+Due Date: March 1, 2024
+
+BILL TO:
+Brian Miller
+123 Magnolia Street
+Seattle, WA 98116
+Phone: (206) 555-9876
+
+VEHICLE INFORMATION:
+Year: 2017
+Make: GMC
+Model: Sierra
+VIN: 1GTN2LEH9HZ123456
+Mileage: 58,700
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Exhaust System Repair                 1   $285.00   $285.00
+Muffler Replacement                   1   $195.00   $195.00
+Exhaust Hangers                       3    $15.00    $45.00
+Labor (3 hours @ $95/hr)              3    $95.00   $285.00
+
+                                    Subtotal:        $810.00
+                                    Sales Tax (10%):  $81.00
+                                    TOTAL DUE:       $891.00
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: Exhaust leak repaired. System warranty: 12 months.
+
+Thank you for your business!

@@ -1,0 +1,42 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-001
+Date: January 5, 2024
+Due Date: January 20, 2024
+
+BILL TO:
+Sarah Johnson
+456 Oak Avenue
+Seattle, WA 98102
+Phone: (206) 555-7890
+
+VEHICLE INFORMATION:
+Year: 2018
+Make: Honda
+Model: Civic
+VIN: 1HGBH41JXMN109186
+Mileage: 45,230
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Oil Change (Synthetic)                1    $75.00    $75.00
+Oil Filter Replacement                1    $15.00    $15.00
+Tire Rotation                         1    $35.00    $35.00
+Multi-Point Inspection                1    $0.00     $0.00
+Labor (1.5 hours @ $95/hr)          1.5    $95.00   $142.50
+
+                                    Subtotal:        $267.50
+                                    Sales Tax (10%):  $26.75
+                                    TOTAL DUE:       $294.25
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: Next oil change due at 48,230 miles or in 6 months.
+All work guaranteed for 90 days or 3,000 miles.
+
+Thank you for your business!

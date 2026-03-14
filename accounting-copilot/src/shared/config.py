@@ -71,7 +71,6 @@ class Config:
         """Validate required configuration values are set."""
         required = [
             "DYNAMODB_TABLE",
-            "DOCUMENTS_BUCKET",
             "AWS_REGION",
         ]
         

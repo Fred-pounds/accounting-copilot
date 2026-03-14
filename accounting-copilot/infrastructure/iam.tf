@@ -106,6 +106,13 @@ resource "aws_iam_role_policy" "lambda_execution" {
       {
         Effect = "Allow"
         Action = [
+          "lambda:InvokeFunction"
+        ]
+        Resource = "arn:aws:lambda:${local.region}:${local.account_id}:function:${var.project_name}-*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "xray:PutTraceSegments",
           "xray:PutTelemetryRecords"
         ]
@@ -149,6 +156,21 @@ resource "aws_iam_role_policy" "step_functions" {
           "lambda:InvokeFunction"
         ]
         Resource = "arn:aws:lambda:${local.region}:${local.account_id}:function:${var.project_name}-*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:Query",
+          "dynamodb:Scan"
+        ]
+        Resource = [
+          aws_dynamodb_table.main.arn,
+          "${aws_dynamodb_table.main.arn}/index/*"
+        ]
       },
       {
         Effect = "Allow"

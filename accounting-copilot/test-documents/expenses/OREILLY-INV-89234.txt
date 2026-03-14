@@ -1,0 +1,36 @@
+O'REILLY AUTO PARTS
+Store #4521
+456 Commerce Street, Seattle, WA 98102
+Phone: (206) 555-AUTO
+www.oreillyauto.com
+
+INVOICE #89234
+Date: January 18, 2024
+Terms: Net 30
+
+BILL TO:
+AutoFix Repair Shop
+123 Main Street
+Seattle, WA 98101
+Account #: 789012
+
+ITEMS ORDERED:
+Part Number    Description                    Qty    Price     Total
+--------------------------------------------------------------------
+AC-4521        AC Compressor - Jeep             1  $385.00    $385.00
+AC-2340        AC Refrigerant R-134a (12pk)     2   $42.50     $85.00
+SN-8901        O2 Sensor - Ford                 2  $145.00    $290.00
+TB-5623        Timing Belt Kit - VW             1  $295.00    $295.00
+WP-3421        Water Pump - VW                  1  $225.00    $225.00
+SB-1234        Serpentine Belt Kit              3   $28.50     $85.50
+TR-9876        Transmission Filter - Nissan     2   $32.50     $65.00
+TR-5432        ATF Fluid (Case)                 2   $78.00    $156.00
+
+                                          Subtotal:        $1,586.50
+                                          Sales Tax (10%):   $158.65
+                                          TOTAL DUE:       $1,745.15
+
+Payment Due: February 17, 2024
+Payment Method: Account Credit
+
+Thank you for your business!

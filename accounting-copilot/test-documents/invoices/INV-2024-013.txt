@@ -1,0 +1,42 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-013
+Date: March 5, 2024
+Due Date: March 20, 2024
+
+BILL TO:
+Nancy Harris
+567 Beech Court
+Seattle, WA 98117
+Phone: (206) 555-1357
+
+VEHICLE INFORMATION:
+Year: 2020
+Make: Tesla
+Model: Model 3
+VIN: 5YJ3E1EA5LF123456
+Mileage: 22,100
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Tire Rotation                         1    $45.00    $45.00
+Brake Fluid Service                   1    $95.00    $95.00
+Cabin Filter Replacement              1    $42.00    $42.00
+Multi-Point Inspection                1    $75.00    $75.00
+Software Update Check                 1    $0.00     $0.00
+Labor (1.5 hours @ $95/hr)          1.5    $95.00   $142.50
+
+                                    Subtotal:        $399.50
+                                    Sales Tax (10%):  $39.95
+                                    TOTAL DUE:       $439.45
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: Battery health: 96%. All systems normal.
+
+Thank you for your business!

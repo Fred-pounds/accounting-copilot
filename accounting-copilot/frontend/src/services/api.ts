@@ -132,12 +132,19 @@ class ApiClient {
   }
 
   async approveTransaction(id: string): Promise<Transaction> {
-    const response = await this.client.post(`/transactions/${id}/approve`);
+    const response = await this.client.post(`/transactions`, { 
+      action: 'approve',
+      transaction_id: id 
+    });
     return response.data;
   }
 
   async correctTransaction(id: string, corrections: { category?: string; amount?: number }): Promise<Transaction> {
-    const response = await this.client.post(`/transactions/${id}/correct`, corrections);
+    const response = await this.client.post(`/transactions`, { 
+      action: 'correct',
+      transaction_id: id,
+      ...corrections 
+    });
     return response.data;
   }
 
@@ -154,12 +161,12 @@ class ApiClient {
 
   // Assistant endpoints
   async queryAssistant(question: string): Promise<ConversationMessage> {
-    const response = await this.client.post('/assistant/query', { question });
+    const response = await this.client.post('/assistant', { question });
     return response.data;
   }
 
   async getConversationHistory(): Promise<ConversationMessage[]> {
-    const response = await this.client.get('/assistant/history');
+    const response = await this.client.get('/assistant');
     return response.data;
   }
 

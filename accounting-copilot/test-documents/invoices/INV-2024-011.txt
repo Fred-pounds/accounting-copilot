@@ -1,0 +1,40 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-011
+Date: February 18, 2024
+Due Date: March 4, 2024
+
+BILL TO:
+Patricia Brown
+567 Willow Street
+Seattle, WA 98108
+Phone: (206) 555-9012
+
+VEHICLE INFORMATION:
+Year: 2021
+Make: Mazda
+Model: CX-5
+VIN: JM3KFBDM5M0123456
+Mileage: 18,900
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Battery Replacement                   1   $185.00   $185.00
+Battery Installation                  1    $25.00    $25.00
+Alternator Testing                    1    $45.00    $45.00
+Labor (1 hour @ $95/hr)               1    $95.00    $95.00
+
+                                    Subtotal:        $350.00
+                                    Sales Tax (10%):  $35.00
+                                    TOTAL DUE:       $385.00
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: Battery warranty: 36 months. Alternator charging properly.
+
+Thank you for your business!

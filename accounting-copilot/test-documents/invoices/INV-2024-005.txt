@@ -1,0 +1,41 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-005
+Date: January 22, 2024
+Due Date: February 6, 2024
+
+BILL TO:
+Lisa Anderson
+987 Cedar Lane
+Seattle, WA 98106
+Phone: (206) 555-6789
+
+VEHICLE INFORMATION:
+Year: 2020
+Make: Subaru
+Model: Outback
+VIN: 4S4BTAFC5L3123456
+Mileage: 28,450
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+30,000 Mile Service                   1   $295.00   $295.00
+Air Filter Replacement                1    $45.00    $45.00
+Cabin Filter Replacement              1    $35.00    $35.00
+Coolant Flush                         1    $89.00    $89.00
+Labor (2 hours @ $95/hr)              2    $95.00   $190.00
+
+                                    Subtotal:        $654.00
+                                    Sales Tax (10%):  $65.40
+                                    TOTAL DUE:       $719.40
+
+Payment Method: Debit Card
+Payment Status: PAID
+
+Notes: All fluids topped off. Next major service at 60,000 miles.
+
+Thank you for your business!

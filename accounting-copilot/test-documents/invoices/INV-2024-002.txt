@@ -1,0 +1,41 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-002
+Date: January 8, 2024
+Due Date: January 23, 2024
+
+BILL TO:
+Michael Chen
+789 Pine Street
+Seattle, WA 98103
+Phone: (206) 555-4567
+
+VEHICLE INFORMATION:
+Year: 2016
+Make: Toyota
+Model: Camry
+VIN: 4T1BF1FK5GU123456
+Mileage: 68,450
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Brake Pad Replacement (Front)         1   $180.00   $180.00
+Brake Rotor Resurfacing (Front)       2    $45.00    $90.00
+Brake Fluid Flush                     1    $89.00    $89.00
+Labor (3 hours @ $95/hr)              3    $95.00   $285.00
+
+                                    Subtotal:        $644.00
+                                    Sales Tax (10%):  $64.40
+                                    TOTAL DUE:       $708.40
+
+Payment Method: Check #2341
+Payment Status: PAID
+
+Notes: Rear brakes at 40% - recommend inspection in 6 months.
+Brake system warranty: 12 months or 12,000 miles.
+
+Thank you for your business!

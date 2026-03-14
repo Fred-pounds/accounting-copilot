@@ -1,0 +1,43 @@
+AUTOFIX REPAIR SHOP
+Payroll Summary Report
+Period: February 1-29, 2024
+
+EMPLOYEE PAYROLL:
+
+Employee: Mike Rodriguez - Lead Mechanic
+Hourly Rate: $32.00
+Hours Worked: 168
+Gross Pay: $5,376.00
+Taxes & Deductions: $1,344.00
+Net Pay: $4,032.00
+
+Employee: Tom Jackson - Mechanic
+Hourly Rate: $28.00
+Hours Worked: 160
+Gross Pay: $4,480.00
+Taxes & Deductions: $1,120.00
+Net Pay: $3,360.00
+
+Employee: Sarah Kim - Service Advisor
+Hourly Rate: $24.00
+Hours Worked: 152
+Gross Pay: $3,648.00
+Taxes & Deductions: $912.00
+Net Pay: $2,736.00
+
+Employee: Lisa Martinez - Office Manager
+Salary: $3,500.00/month
+Gross Pay: $3,500.00
+Taxes & Deductions: $875.00
+Net Pay: $2,625.00
+
+EMPLOYER COSTS:
+Total Gross Wages: $17,004.00
+Employer Payroll Taxes (7.65%): $1,300.81
+Workers Comp Insurance: $296.67
+Health Insurance Contribution: $800.00
+
+TOTAL PAYROLL COST: $19,401.48
+
+Payment Date: February 29, 2024
+Payment Method: Direct Deposit

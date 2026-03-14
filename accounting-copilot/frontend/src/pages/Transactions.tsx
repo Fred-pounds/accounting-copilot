@@ -70,59 +70,70 @@ export const Transactions: React.FC = () => {
   if (isLoading) {
     return (
       <div style={styles.container}>
-        <div style={styles.loading}>Loading transactions...</div>
+        <h1 style={styles.title}>Transactions</h1>
+        <div style={styles.loadingWrap}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}>
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+          <span style={{ color: 'var(--color-text-muted)' }}>Loading transactions...</span>
+        </div>
       </div>
     );
   }
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Transactions</h1>
+      <div style={styles.header}>
+        <div>
+          <h1 style={styles.title}>Transactions</h1>
+          <p style={styles.subtitle}>{sortedTransactions.length} transaction{sortedTransactions.length !== 1 ? 's' : ''} found</p>
+        </div>
+      </div>
 
       {/* Filters */}
       <div style={styles.filters}>
         <div style={styles.filterGroup}>
-          <label htmlFor="type-filter" style={styles.filterLabel}>Type:</label>
+          <label htmlFor="type-filter" style={styles.filterLabel}>Type</label>
           <select
             id="type-filter"
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value as any)}
             style={styles.select}
           >
-            <option value="all">All</option>
+            <option value="all">All Types</option>
             <option value="income">Income</option>
             <option value="expense">Expense</option>
           </select>
         </div>
 
         <div style={styles.filterGroup}>
-          <label htmlFor="status-filter" style={styles.filterLabel}>Status:</label>
+          <label htmlFor="status-filter" style={styles.filterLabel}>Status</label>
           <select
             id="status-filter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
             style={styles.select}
           >
-            <option value="all">All</option>
+            <option value="all">All Status</option>
             <option value="approved">Approved</option>
             <option value="pending_review">Pending Review</option>
           </select>
         </div>
 
         <div style={styles.filterGroup}>
-          <label htmlFor="category-filter" style={styles.filterLabel}>Category:</label>
+          <label htmlFor="category-filter" style={styles.filterLabel}>Category</label>
           <input
             id="category-filter"
             type="text"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            placeholder="Filter by category"
+            placeholder="Search category..."
             style={styles.input}
           />
         </div>
 
         <div style={styles.filterGroup}>
-          <label htmlFor="sort-by-filter" style={styles.filterLabel}>Sort by:</label>
+          <label htmlFor="sort-by-filter" style={styles.filterLabel}>Sort by</label>
           <select
             id="sort-by-filter"
             value={sortBy}
@@ -135,20 +146,25 @@ export const Transactions: React.FC = () => {
         </div>
 
         <div style={styles.filterGroup}>
-          <label htmlFor="order-filter" style={styles.filterLabel}>Order:</label>
+          <label htmlFor="order-filter" style={styles.filterLabel}>Order</label>
           <select
             id="order-filter"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value as any)}
             style={styles.select}
           >
-            <option value="desc">Descending</option>
-            <option value="asc">Ascending</option>
+            <option value="desc">Newest first</option>
+            <option value="asc">Oldest first</option>
           </select>
         </div>
       </div>
 
-      {error && <div style={styles.error}>{error}</div>}
+      {error && (
+        <div style={styles.error}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
+          {error}
+        </div>
+      )}
 
       {/* Transactions Table */}
       <div style={styles.tableContainer}>
@@ -168,14 +184,21 @@ export const Transactions: React.FC = () => {
           <tbody>
             {sortedTransactions.map((transaction) => (
               <tr key={transaction.transaction_id} style={styles.tr}>
-                <td style={styles.td}>{new Date(transaction.date).toLocaleDateString()}</td>
-                <td style={styles.td}>{transaction.vendor}</td>
-                <td style={styles.td}>{transaction.category}</td>
+                <td style={styles.td}>
+                  <span style={styles.dateText}>{new Date(transaction.date).toLocaleDateString()}</span>
+                </td>
+                <td style={styles.td}>
+                  <span style={styles.vendorText}>{transaction.vendor}</span>
+                </td>
+                <td style={styles.td}>
+                  <span style={styles.categoryBadge}>{transaction.category}</span>
+                </td>
                 <td style={styles.td}>
                   <span
                     style={{
-                      color: transaction.type === 'income' ? '#28a745' : '#dc3545',
-                      fontWeight: '500',
+                      color: transaction.type === 'income' ? 'var(--color-success)' : 'var(--color-danger)',
+                      fontWeight: 700,
+                      fontSize: '0.9rem',
                     }}
                   >
                     {transaction.type === 'income' ? '+' : '-'}$
@@ -185,62 +208,74 @@ export const Transactions: React.FC = () => {
                 <td style={styles.td}>
                   <span
                     style={{
-                      ...styles.badge,
-                      backgroundColor: transaction.type === 'income' ? '#d4edda' : '#f8d7da',
-                      color: transaction.type === 'income' ? '#155724' : '#721c24',
+                      ...styles.typeBadge,
+                      backgroundColor: transaction.type === 'income' ? 'var(--color-success-light)' : 'var(--color-danger-light)',
+                      color: transaction.type === 'income' ? 'var(--color-success-dark)' : 'var(--color-danger-dark)',
                     }}
                   >
                     {transaction.type}
                   </span>
                 </td>
                 <td style={styles.td}>
-                  <span
-                    style={{
-                      color:
-                        transaction.classification_confidence >= 0.7
-                          ? '#28a745'
-                          : '#ffc107',
-                    }}
-                  >
-                    {(transaction.classification_confidence * 100).toFixed(0)}%
-                  </span>
+                  <div style={styles.confidenceWrap}>
+                    <div style={styles.confidenceBar}>
+                      <div
+                        style={{
+                          ...styles.confidenceFill,
+                          width: `${transaction.classification_confidence * 100}%`,
+                          backgroundColor: transaction.classification_confidence >= 0.7 ? 'var(--color-success)' : 'var(--color-warning)',
+                        }}
+                      />
+                    </div>
+                    <span style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      color: transaction.classification_confidence >= 0.7 ? 'var(--color-success)' : 'var(--color-warning)',
+                    }}>
+                      {(transaction.classification_confidence * 100).toFixed(0)}%
+                    </span>
+                  </div>
                 </td>
                 <td style={styles.td}>
                   <span
                     style={{
-                      ...styles.badge,
+                      ...styles.statusBadge,
                       backgroundColor:
                         transaction.status === 'approved'
-                          ? '#d4edda'
+                          ? 'var(--color-success-light)'
                           : transaction.status === 'pending_review'
-                          ? '#fff3cd'
-                          : '#f8d7da',
+                            ? 'var(--color-warning-light)'
+                            : 'var(--color-danger-light)',
                       color:
                         transaction.status === 'approved'
-                          ? '#155724'
+                          ? 'var(--color-success-dark)'
                           : transaction.status === 'pending_review'
-                          ? '#856404'
-                          : '#721c24',
+                            ? 'var(--color-warning-dark)'
+                            : 'var(--color-danger-dark)',
                     }}
                   >
+                    {transaction.status === 'pending_review' && '⏳ '}
+                    {transaction.status === 'approved' && '✓ '}
                     {transaction.status.replace('_', ' ')}
                   </span>
                 </td>
                 <td style={styles.td}>
-                  <button
-                    onClick={() => setSelectedTransaction(transaction)}
-                    style={styles.viewButton}
-                  >
-                    View
-                  </button>
-                  {transaction.status === 'pending_review' && (
+                  <div style={styles.actionBtns}>
                     <button
-                      onClick={() => handleApprove(transaction.transaction_id)}
-                      style={styles.approveButton}
+                      onClick={() => setSelectedTransaction(transaction)}
+                      style={styles.viewButton}
                     >
-                      Approve
+                      View
                     </button>
-                  )}
+                    {transaction.status === 'pending_review' && (
+                      <button
+                        onClick={() => handleApprove(transaction.transaction_id)}
+                        style={styles.approveButton}
+                      >
+                        Approve
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -248,7 +283,13 @@ export const Transactions: React.FC = () => {
         </table>
 
         {sortedTransactions.length === 0 && (
-          <div style={styles.emptyState}>No transactions found</div>
+          <div style={styles.emptyState}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="1.5">
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <p style={styles.emptyTitle}>No transactions found</p>
+            <p style={styles.emptyText}>Try adjusting your filters</p>
+          </div>
         )}
       </div>
 
@@ -267,110 +308,205 @@ export const Transactions: React.FC = () => {
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    padding: '2rem',
+    padding: 'var(--space-page)',
     maxWidth: '1400px',
     margin: '0 auto',
   },
-  title: {
-    fontSize: '1.875rem',
-    fontWeight: 'bold',
-    marginBottom: '1.5rem',
+  header: {
+    marginBottom: '20px',
   },
-  loading: {
-    textAlign: 'center',
-    padding: '3rem',
-    fontSize: '1.125rem',
-    color: '#666',
+  title: {
+    fontSize: '1.75rem',
+    fontWeight: 800,
+    color: 'var(--color-text)',
+    letterSpacing: '-0.5px',
+  },
+  subtitle: {
+    fontSize: '0.85rem',
+    color: 'var(--color-text-muted)',
+    marginTop: '4px',
+  },
+  loadingWrap: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '12px',
+    padding: '4rem',
   },
   error: {
-    backgroundColor: '#fee',
-    color: '#c33',
-    padding: '1rem',
-    borderRadius: '8px',
-    marginBottom: '1rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    backgroundColor: 'var(--color-danger-light)',
+    color: 'var(--color-danger)',
+    padding: '12px 16px',
+    borderRadius: 'var(--radius-lg)',
+    marginBottom: '16px',
+    fontSize: '0.85rem',
+    fontWeight: 500,
   },
   filters: {
     display: 'flex',
-    gap: '1rem',
-    marginBottom: '1.5rem',
+    gap: '12px',
+    marginBottom: '20px',
     flexWrap: 'wrap',
+    padding: '16px 20px',
+    backgroundColor: 'var(--color-card)',
+    borderRadius: 'var(--radius-lg)',
+    boxShadow: 'var(--shadow-xs)',
   },
   filterGroup: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '0.25rem',
+    gap: '4px',
   },
   filterLabel: {
-    fontSize: '0.875rem',
-    fontWeight: '500',
+    fontSize: '0.7rem',
+    fontWeight: 600,
+    color: 'var(--color-text-muted)',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.5px',
   },
   select: {
-    padding: '0.5rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '0.875rem',
+    padding: '8px 12px',
+    border: '1.5px solid var(--color-border)',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.85rem',
+    backgroundColor: 'var(--color-surface)',
+    color: 'var(--color-text)',
+    outline: 'none',
+    fontFamily: 'inherit',
+    cursor: 'pointer',
   },
   input: {
-    padding: '0.5rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '0.875rem',
+    padding: '8px 12px',
+    border: '1.5px solid var(--color-border)',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.85rem',
+    backgroundColor: 'var(--color-surface)',
+    color: 'var(--color-text)',
+    outline: 'none',
+    fontFamily: 'inherit',
   },
   tableContainer: {
-    backgroundColor: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'var(--color-card)',
+    borderRadius: 'var(--radius-lg)',
+    boxShadow: 'var(--shadow-sm)',
     overflow: 'auto',
+    animation: 'fadeIn 0.3s ease-out',
   },
   table: {
     width: '100%',
     borderCollapse: 'collapse',
   },
   th: {
-    padding: '1rem',
+    padding: '14px 16px',
     textAlign: 'left',
-    borderBottom: '2px solid #ddd',
-    fontWeight: '600',
-    fontSize: '0.875rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.5px',
+    borderBottom: '2px solid var(--color-border)',
+    fontWeight: 600,
+    fontSize: '0.75rem',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.7px',
+    color: 'var(--color-text-muted)',
   },
   tr: {
-    borderBottom: '1px solid #f0f0f0',
+    borderBottom: '1px solid var(--color-border-light)',
+    transition: 'background-color var(--transition-fast)',
   },
   td: {
-    padding: '1rem',
+    padding: '14px 16px',
     fontSize: '0.875rem',
   },
-  badge: {
-    padding: '0.25rem 0.5rem',
-    borderRadius: '4px',
+  dateText: {
+    color: 'var(--color-text-secondary)',
+    fontSize: '0.85rem',
+  },
+  vendorText: {
+    fontWeight: 600,
+    color: 'var(--color-text)',
+  },
+  categoryBadge: {
+    padding: '3px 10px',
+    backgroundColor: 'var(--color-primary-50)',
+    color: 'var(--color-primary)',
+    borderRadius: 'var(--radius-full)',
     fontSize: '0.75rem',
-    fontWeight: '500',
-    textTransform: 'capitalize',
+    fontWeight: 600,
+  },
+  typeBadge: {
+    padding: '4px 10px',
+    borderRadius: 'var(--radius-full)',
+    fontSize: '0.7rem',
+    fontWeight: 600,
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.5px',
+  },
+  confidenceWrap: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  confidenceBar: {
+    width: '48px',
+    height: '6px',
+    backgroundColor: 'var(--color-border-light)',
+    borderRadius: 'var(--radius-full)',
+    overflow: 'hidden',
+  },
+  confidenceFill: {
+    height: '100%',
+    borderRadius: 'var(--radius-full)',
+    transition: 'width 0.3s ease',
+  },
+  statusBadge: {
+    padding: '4px 10px',
+    borderRadius: 'var(--radius-full)',
+    fontSize: '0.7rem',
+    fontWeight: 600,
+    textTransform: 'capitalize' as const,
+    whiteSpace: 'nowrap' as const,
+  },
+  actionBtns: {
+    display: 'flex',
+    gap: '6px',
   },
   viewButton: {
-    padding: '0.375rem 0.75rem',
-    backgroundColor: '#007bff',
+    padding: '6px 14px',
+    backgroundColor: 'var(--color-primary)',
     color: 'white',
     border: 'none',
-    borderRadius: '4px',
-    fontSize: '0.875rem',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.8rem',
+    fontWeight: 600,
     cursor: 'pointer',
-    marginRight: '0.5rem',
+    fontFamily: 'inherit',
   },
   approveButton: {
-    padding: '0.375rem 0.75rem',
-    backgroundColor: '#28a745',
+    padding: '6px 14px',
+    backgroundColor: 'var(--color-success)',
     color: 'white',
     border: 'none',
-    borderRadius: '4px',
-    fontSize: '0.875rem',
+    borderRadius: 'var(--radius-md)',
+    fontSize: '0.8rem',
+    fontWeight: 600,
     cursor: 'pointer',
+    fontFamily: 'inherit',
   },
   emptyState: {
     textAlign: 'center',
-    padding: '3rem',
-    color: '#999',
+    padding: '4rem 2rem',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  emptyTitle: {
+    fontSize: '1.1rem',
+    fontWeight: 700,
+    color: 'var(--color-text)',
+  },
+  emptyText: {
+    color: 'var(--color-text-muted)',
+    fontSize: '0.85rem',
   },
 };

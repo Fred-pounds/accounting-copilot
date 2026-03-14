@@ -1,0 +1,41 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-012
+Date: February 25, 2024
+Due Date: March 11, 2024
+
+BILL TO:
+Christopher Lee
+234 Walnut Avenue
+Seattle, WA 98113
+Phone: (206) 555-3210
+
+VEHICLE INFORMATION:
+Year: 2016
+Make: BMW
+Model: 328i
+VIN: WBA8E9G59GNT12345
+Mileage: 72,450
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+Spark Plug Replacement (6)            6    $28.00   $168.00
+Ignition Coil Replacement             2    $95.00   $190.00
+Engine Air Filter                     1    $45.00    $45.00
+Cabin Air Filter                      1    $38.00    $38.00
+Labor (3 hours @ $95/hr)              3    $95.00   $285.00
+
+                                    Subtotal:        $726.00
+                                    Sales Tax (10%):  $72.60
+                                    TOTAL DUE:       $798.60
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: Engine running smoothly. Recommend fuel system service at 80k miles.
+
+Thank you for your business!

@@ -1,0 +1,37 @@
+INTUIT QUICKBOOKS
+Subscription Services
+2632 Marine Way, Mountain View, CA 94043
+Phone: 1-800-4INTUIT
+www.quickbooks.intuit.com
+
+SUBSCRIPTION INVOICE
+Invoice Number: QB-2024-02-123456
+Invoice Date: February 1, 2024
+Billing Period: February 1 - February 29, 2024
+
+SUBSCRIBER:
+AutoFix Repair Shop
+123 Main Street
+Seattle, WA 98101
+Account ID: QB-789012
+
+SUBSCRIPTION DETAILS:
+Plan: QuickBooks Online Plus
+Users: 3
+Features: Advanced reporting, inventory tracking,
+          project management, 1099 contractor management
+
+Monthly Subscription Fee:              $90.00
+Payroll Add-On (4 employees):          $45.00
+Payment Processing (January volume):   $125.50
+
+                            SUBTOTAL:  $260.50
+                            Tax:         $0.00
+                            TOTAL DUE: $260.50
+
+Payment Method: Credit Card ending in 4567
+Payment Status: PAID - February 1, 2024
+
+Next billing date: March 1, 2024
+
+Thank you for using QuickBooks!

@@ -1,0 +1,40 @@
+AUTOFIX REPAIR SHOP
+123 Main Street, Seattle, WA 98101
+Phone: (206) 555-0123
+Email: info@autofixseattle.com
+
+INVOICE #INV-2024-014
+Date: March 8, 2024
+Due Date: March 23, 2024
+
+BILL TO:
+James Wilson
+890 Spruce Drive
+Seattle, WA 98109
+Phone: (206) 555-2468
+
+VEHICLE INFORMATION:
+Year: 2019
+Make: Jeep
+Model: Grand Cherokee
+VIN: 1C4RJFBG5KC123456
+Mileage: 41,200
+
+SERVICES PROVIDED:
+Description                          Qty    Rate      Amount
+----------------------------------------------------------
+AC System Diagnosis                   1   $125.00   $125.00
+AC Compressor Replacement             1   $485.00   $485.00
+AC Refrigerant Recharge               1    $89.00    $89.00
+Labor (4 hours @ $95/hr)              4    $95.00   $380.00
+
+                                    Subtotal:      $1,079.00
+                                    Sales Tax (10%): $107.90
+                                    TOTAL DUE:     $1,186.90
+
+Payment Method: Credit Card
+Payment Status: PAID
+
+Notes: AC system tested and cooling properly. Warranty: 12 months.
+
+Thank you for your business!
