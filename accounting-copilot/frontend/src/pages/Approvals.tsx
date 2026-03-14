@@ -79,7 +79,7 @@ export const Approvals: React.FC = () => {
       ) : (
         <div style={s.list}>
           {transactions.map((txn, i) => (
-            <div key={txn.transaction_id} style={{ ...s.card, animationDelay: `${i * 0.04}s` }}>
+            <div key={txn.transaction_id} style={{ ...s.card, animationDelay: `${i * 0.04}s`, borderLeft: `4px solid ${txn.type === 'income' ? '#059669' : '#e11d48'}` }}>
               <div style={s.cardBody}>
                 <div style={s.cardTop}>
                   <div style={s.cardLeft}>
@@ -202,7 +202,7 @@ const s: Record<string, React.CSSProperties> = {
   emptyTitle: { fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', marginBottom: 4 },
   emptyText: { color: 'var(--color-text-muted)', fontSize: '0.9rem' },
   list: { display: 'flex', flexDirection: 'column', gap: 16 },
-  card: { backgroundColor: 'var(--color-card)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', overflow: 'hidden', borderLeft: '4px solid #f59e0b', animation: 'slideUp 0.3s ease-out both' },
+  card: { backgroundColor: 'var(--color-card)', borderRadius: 14, boxShadow: 'var(--shadow-card)', overflow: 'hidden', borderLeft: '4px solid #f59e0b', animation: 'slideUp 0.3s ease-out both', border: '1px solid rgba(0,0,0,0.04)' },
   cardBody: { padding: '18px 22px' },
   cardTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   cardLeft: { display: 'flex', alignItems: 'center', gap: 10 },

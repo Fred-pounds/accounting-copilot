@@ -91,6 +91,15 @@ class ApiClient {
     return response.data;
   }
 
+  async getDocumentStatus(id: string): Promise<{ ocr_status: string; error_message?: string }> {
+    const response = await this.client.get(`/documents/${id}`);
+    const data = response.data;
+    return {
+      ocr_status: data.ocr_status || data.data?.ocr_status || 'pending',
+      error_message: data.error_message || data.data?.error_message,
+    };
+  }
+
   async listDocuments(params?: { limit?: number; offset?: number }): Promise<Document[]> {
     const response = await this.client.get('/documents', { params });
     // Handle both array response and object with documents property

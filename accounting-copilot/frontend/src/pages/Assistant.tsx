@@ -2,6 +2,83 @@ import React, { useState, useEffect, useRef } from 'react';
 import { apiClient } from '../services/api';
 import type { ConversationMessage } from '../types';
 
+/** Minimal markdown → React elements renderer */
+function renderMarkdown(text: string): React.ReactNode[] {
+  const lines = text.split('\n');
+  const elements: React.ReactNode[] = [];
+  let i = 0;
+
+  const inlineFormat = (line: string, key: string): React.ReactNode => {
+    // Bold + italic, bold, italic, inline code
+    const parts: React.ReactNode[] = [];
+    const regex = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`(.+?)`)/g;
+    let last = 0;
+    let m: RegExpExecArray | null;
+    let idx = 0;
+    while ((m = regex.exec(line)) !== null) {
+      if (m.index > last) parts.push(line.slice(last, m.index));
+      if (m[2]) parts.push(<strong key={`${key}-${idx++}`}><em>{m[2]}</em></strong>);
+      else if (m[3]) parts.push(<strong key={`${key}-${idx++}`}>{m[3]}</strong>);
+      else if (m[4]) parts.push(<em key={`${key}-${idx++}`}>{m[4]}</em>);
+      else if (m[5]) parts.push(<code key={`${key}-${idx++}`} style={inlineCodeStyle}>{m[5]}</code>);
+      last = m.index + m[0].length;
+    }
+    if (last < line.length) parts.push(line.slice(last));
+    return parts.length === 1 ? parts[0] : parts;
+  };
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Headings
+    const h3 = line.match(/^###\s+(.*)/);
+    const h2 = line.match(/^##\s+(.*)/);
+    const h1 = line.match(/^#\s+(.*)/);
+    if (h1) { elements.push(<h3 key={i} style={mdH1}>{inlineFormat(h1[1], `h1-${i}`)}</h3>); i++; continue; }
+    if (h2) { elements.push(<h4 key={i} style={mdH2}>{inlineFormat(h2[1], `h2-${i}`)}</h4>); i++; continue; }
+    if (h3) { elements.push(<h5 key={i} style={mdH3}>{inlineFormat(h3[1], `h3-${i}`)}</h5>); i++; continue; }
+
+    // Unordered list
+    if (/^[-*]\s+/.test(line)) {
+      const items: React.ReactNode[] = [];
+      while (i < lines.length && /^[-*]\s+/.test(lines[i])) {
+        items.push(<li key={i} style={mdLi}>{inlineFormat(lines[i].replace(/^[-*]\s+/, ''), `li-${i}`)}</li>);
+        i++;
+      }
+      elements.push(<ul key={`ul-${i}`} style={mdUl}>{items}</ul>);
+      continue;
+    }
+
+    // Ordered list
+    if (/^\d+\.\s+/.test(line)) {
+      const items: React.ReactNode[] = [];
+      while (i < lines.length && /^\d+\.\s+/.test(lines[i])) {
+        items.push(<li key={i} style={mdLi}>{inlineFormat(lines[i].replace(/^\d+\.\s+/, ''), `oli-${i}`)}</li>);
+        i++;
+      }
+      elements.push(<ol key={`ol-${i}`} style={mdUl}>{items}</ol>);
+      continue;
+    }
+
+    // Blank line
+    if (line.trim() === '') { i++; continue; }
+
+    // Paragraph
+    elements.push(<p key={i} style={mdP}>{inlineFormat(line, `p-${i}`)}</p>);
+    i++;
+  }
+
+  return elements;
+}
+
+const inlineCodeStyle: React.CSSProperties = { fontFamily: 'monospace', backgroundColor: 'rgba(0,0,0,0.07)', padding: '1px 4px', borderRadius: 3, fontSize: '0.85em' };
+const mdH1: React.CSSProperties = { fontSize: '1rem', fontWeight: 700, margin: '10px 0 4px' };
+const mdH2: React.CSSProperties = { fontSize: '0.95rem', fontWeight: 700, margin: '8px 0 4px' };
+const mdH3: React.CSSProperties = { fontSize: '0.9rem', fontWeight: 600, margin: '6px 0 4px' };
+const mdUl: React.CSSProperties = { margin: '4px 0', paddingLeft: '20px' };
+const mdLi: React.CSSProperties = { marginBottom: '2px', lineHeight: 1.5 };
+const mdP: React.CSSProperties = { margin: '4px 0', lineHeight: 1.6 };
+
 const suggestedQuestions = [
   "Can I afford to hire a new employee?",
   "What are my top expenses this month?",
@@ -68,6 +145,10 @@ export const Assistant: React.FC = () => {
 
   return (
     <div style={styles.container}>
+      <div style={styles.pageHeader}>
+        <h1 style={styles.pageTitle}>Assistant</h1>
+        <p style={styles.pageSubtitle}>Ask questions about your business finances</p>
+      </div>
       <div style={styles.chatContainer}>
         <div style={styles.messagesContainer}>
           {messages.length === 0 && (
@@ -126,7 +207,7 @@ export const Assistant: React.FC = () => {
                     message.content
                   ) : (
                     <>
-                      {message.response?.content}
+                      <div>{renderMarkdown(message.response?.content || message.content || '')}</div>
                       {message.response?.citations && message.response.citations.length > 0 && (
                         <div style={styles.citations}>
                           <div style={styles.citationsTitle}>
@@ -242,6 +323,21 @@ const styles: Record<string, React.CSSProperties> = {
     height: 'calc(100vh - 2rem)',
     display: 'flex',
     flexDirection: 'column',
+  },
+  pageHeader: {
+    marginBottom: '16px',
+    flexShrink: 0,
+  },
+  pageTitle: {
+    fontSize: '1.75rem',
+    fontWeight: 800,
+    color: 'var(--color-text)',
+    letterSpacing: '-0.5px',
+  },
+  pageSubtitle: {
+    fontSize: '0.85rem',
+    color: 'var(--color-text-muted)',
+    marginTop: '4px',
   },
   chatContainer: {
     flex: 1,

@@ -17,6 +17,7 @@ from shared.exceptions import AppError, ValidationError
 from shared.logger import setup_logger
 from shared.audit import log_assistant_query_audit
 from shared.aws_clients import bedrock_runtime, get_dynamodb_table
+from boto3.dynamodb.conditions import Key
 from shared.config import Config
 from shared.models import ConversationMessage, generate_id, generate_timestamp
 
@@ -58,11 +59,7 @@ def query_relevant_transactions(user_id: str, question: str, limit: int = 50) ->
     try:
         logger.info(f"Querying transactions for user: {user_id}")
         response = table.query(
-            KeyConditionExpression='PK = :pk AND begins_with(SK, :sk)',
-            ExpressionAttributeValues={
-                ':pk': f'USER#{user_id}',
-                ':sk': 'TXN#'
-            },
+            KeyConditionExpression=Key('PK').eq(f'USER#{user_id}') & Key('SK').begins_with('TXN#'),
             Limit=limit
         )
         
@@ -78,7 +75,13 @@ def query_relevant_transactions(user_id: str, question: str, limit: int = 50) ->
             if start_date_str <= txn.get('date', '') <= end_date_str
         ]
         
-        logger.info(f"Retrieved {len(filtered_transactions)} transactions for context (filtered from {len(transactions)} by date range {start_date_str} to {end_date_str})")
+        # If date filter returns nothing, fall back to all transactions
+        # (e.g. user asks "this month" but data is from a prior period)
+        if not filtered_transactions and transactions:
+            logger.info(f"Date filter [{start_date_str} - {end_date_str}] returned 0 results, using all {len(transactions)} transactions")
+            filtered_transactions = transactions
+        
+        logger.info(f"Retrieved {len(filtered_transactions)} transactions for context")
         return filtered_transactions
         
     except Exception as e:

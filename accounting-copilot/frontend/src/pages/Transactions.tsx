@@ -12,7 +12,10 @@ export const Transactions: React.FC = () => {
   // Filters
   const [typeFilter, setTypeFilter] = useState<'all' | 'income' | 'expense'>('all');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [vendorFilter, setVendorFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'approved' | 'pending_review'>('all');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'amount'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -22,7 +25,7 @@ export const Transactions: React.FC = () => {
       setError('');
       const params: any = {};
       if (typeFilter !== 'all') params.type = typeFilter;
-      if (categoryFilter) params.category = categoryFilter;
+      // category is filtered client-side (backend requires exact GSI match)
       if (statusFilter !== 'all') params.status = statusFilter;
 
       const data = await apiClient.listTransactions(params);
@@ -36,9 +39,20 @@ export const Transactions: React.FC = () => {
 
   useEffect(() => {
     loadTransactions();
-  }, [typeFilter, categoryFilter, statusFilter]);
+  }, [typeFilter, statusFilter]);
 
-  const sortedTransactions = [...transactions].sort((a, b) => {
+  const sortedTransactions = [...transactions]
+    .filter((t) =>
+      !categoryFilter ||
+      t.category.toLowerCase().includes(categoryFilter.toLowerCase())
+    )
+    .filter((t) =>
+      !vendorFilter ||
+      t.vendor.toLowerCase().includes(vendorFilter.toLowerCase())
+    )
+    .filter((t) => !startDate || t.date >= startDate)
+    .filter((t) => !endDate || t.date <= endDate)
+    .sort((a, b) => {
     let comparison = 0;
     if (sortBy === 'date') {
       comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -129,6 +143,40 @@ export const Transactions: React.FC = () => {
             onChange={(e) => setCategoryFilter(e.target.value)}
             placeholder="Search category..."
             style={styles.input}
+          />
+        </div>
+
+        <div style={styles.filterGroup}>
+          <label htmlFor="vendor-filter" style={styles.filterLabel}>Vendor</label>
+          <input
+            id="vendor-filter"
+            type="text"
+            value={vendorFilter}
+            onChange={(e) => setVendorFilter(e.target.value)}
+            placeholder="Search vendor..."
+            style={styles.input}
+          />
+        </div>
+
+        <div style={styles.filterGroup}>
+          <label htmlFor="start-date-filter" style={styles.filterLabel}>From</label>
+          <input
+            id="start-date-filter"
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            style={{ ...styles.input, width: '138px' }}
+          />
+        </div>
+
+        <div style={styles.filterGroup}>
+          <label htmlFor="end-date-filter" style={styles.filterLabel}>To</label>
+          <input
+            id="end-date-filter"
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            style={{ ...styles.input, width: '138px' }}
           />
         </div>
 
@@ -313,7 +361,10 @@ const styles: Record<string, React.CSSProperties> = {
     margin: '0 auto',
   },
   header: {
-    marginBottom: '20px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: '24px',
   },
   title: {
     fontSize: '1.75rem',
@@ -347,18 +398,22 @@ const styles: Record<string, React.CSSProperties> = {
   },
   filters: {
     display: 'flex',
-    gap: '12px',
-    marginBottom: '20px',
-    flexWrap: 'wrap',
-    padding: '16px 20px',
+    gap: '8px',
+    marginBottom: '16px',
+    flexWrap: 'nowrap',
+    padding: '12px 16px',
     backgroundColor: 'var(--color-card)',
-    borderRadius: 'var(--radius-lg)',
-    boxShadow: 'var(--shadow-xs)',
+    borderRadius: 12,
+    boxShadow: 'var(--shadow-card)',
+    border: '1px solid rgba(0,0,0,0.04)',
+    alignItems: 'flex-end',
+    overflowX: 'auto',
   },
   filterGroup: {
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
+    flexShrink: 0,
   },
   filterLabel: {
     fontSize: '0.7rem',
@@ -368,30 +423,33 @@ const styles: Record<string, React.CSSProperties> = {
     letterSpacing: '0.5px',
   },
   select: {
-    padding: '8px 12px',
+    padding: '7px 8px',
     border: '1.5px solid var(--color-border)',
     borderRadius: 'var(--radius-md)',
-    fontSize: '0.85rem',
+    fontSize: '0.8rem',
     backgroundColor: 'var(--color-surface)',
     color: 'var(--color-text)',
     outline: 'none',
     fontFamily: 'inherit',
     cursor: 'pointer',
+    width: '120px',
   },
   input: {
-    padding: '8px 12px',
+    padding: '7px 8px',
     border: '1.5px solid var(--color-border)',
     borderRadius: 'var(--radius-md)',
-    fontSize: '0.85rem',
+    fontSize: '0.8rem',
     backgroundColor: 'var(--color-surface)',
     color: 'var(--color-text)',
     outline: 'none',
     fontFamily: 'inherit',
+    width: '130px',
   },
   tableContainer: {
     backgroundColor: 'var(--color-card)',
-    borderRadius: 'var(--radius-lg)',
-    boxShadow: 'var(--shadow-sm)',
+    borderRadius: 14,
+    boxShadow: 'var(--shadow-card)',
+    border: '1px solid rgba(0,0,0,0.04)',
     overflow: 'auto',
     animation: 'fadeIn 0.3s ease-out',
   },
@@ -400,21 +458,23 @@ const styles: Record<string, React.CSSProperties> = {
     borderCollapse: 'collapse',
   },
   th: {
-    padding: '14px 16px',
+    padding: '13px 16px',
     textAlign: 'left',
-    borderBottom: '2px solid var(--color-border)',
-    fontWeight: 600,
-    fontSize: '0.75rem',
+    borderBottom: '1px solid var(--color-border)',
+    fontWeight: 700,
+    fontSize: '0.7rem',
     textTransform: 'uppercase' as const,
-    letterSpacing: '0.7px',
+    letterSpacing: '0.8px',
     color: 'var(--color-text-muted)',
+    backgroundColor: '#fafafa',
   },
   tr: {
     borderBottom: '1px solid var(--color-border-light)',
     transition: 'background-color var(--transition-fast)',
+    cursor: 'default',
   },
   td: {
-    padding: '14px 16px',
+    padding: '13px 16px',
     fontSize: '0.875rem',
   },
   dateText: {

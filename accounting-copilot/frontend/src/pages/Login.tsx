@@ -11,302 +11,208 @@ export const Login: React.FC = () => {
   const { signIn, isAuthenticated } = useAuth();
   const [searchParams] = useSearchParams();
 
+  useEffect(() => { if (isAuthenticated) navigate('/dashboard'); }, [isAuthenticated, navigate]);
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
-    }
-  }, [isAuthenticated, navigate]);
-
-  useEffect(() => {
-    if (searchParams.get('timeout') === 'true') {
-      setError('Your session has expired due to inactivity. Please sign in again.');
-    }
+    if (searchParams.get('timeout') === 'true')
+      setError('Your session expired. Please sign in again.');
   }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-
     try {
       await signIn(email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in. Please check your credentials.');
+      setError(err.message || 'Invalid credentials. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
-      {/* Background decorations */}
-      <div style={styles.bgOrb1} />
-      <div style={styles.bgOrb2} />
-      <div style={styles.bgOrb3} />
-
-      <div style={styles.card}>
-        {/* Brand header */}
-        <div style={styles.brandSection}>
-          <div style={styles.brandIcon}>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" />
-              <path d="M2 17l10 5 10-5" />
-              <path d="M2 12l10 5 10-5" />
+    <div style={s.page}>
+      {/* Left panel — branding */}
+      <div style={s.left}>
+        <div style={s.leftInner}>
+          <div style={s.logoWrap}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
             </svg>
           </div>
-          <h1 style={styles.title}>AccoCopilot</h1>
-          <p style={styles.subtitle}>AI-powered accounting for your business</p>
+          <h1 style={s.leftTitle}>AI Accounting Copilot</h1>
+          <p style={s.leftSub}>AI-powered accounting for modern businesses</p>
+
+          <div style={s.features}>
+            {[
+              { icon: '⚡', text: 'Instant transaction classification' },
+              { icon: '🔍', text: 'Smart document OCR processing' },
+              { icon: '💬', text: 'AI financial assistant' },
+              { icon: '🔒', text: 'Bank-grade security & encryption' },
+            ].map((f) => (
+              <div key={f.text} style={s.featureItem}>
+                <span style={s.featureIcon}>{f.icon}</span>
+                <span style={s.featureText}>{f.text}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {error && (
-          <div style={styles.error}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
-            <span>{error}</span>
-          </div>
-        )}
+        {/* Decorative orbs */}
+        <div style={s.orb1} />
+        <div style={s.orb2} />
+      </div>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.formGroup}>
-            <label htmlFor="email" style={styles.label}>
-              Email address
-            </label>
-            <div style={styles.inputWrapper}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={styles.inputIcon}>
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
+      {/* Right panel — form */}
+      <div style={s.right}>
+        <div style={s.formCard}>
+          <div style={s.formHeader}>
+            <h2 style={s.formTitle}>Welcome back</h2>
+            <p style={s.formSub}>Sign in to your account</p>
+          </div>
+
+          {error && (
+            <div style={s.errorBox}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ flexShrink: 0 }}>
+                <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
               </svg>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                style={styles.input}
-                placeholder="you@company.com"
-              />
+              {error}
             </div>
-          </div>
+          )}
 
-          <div style={styles.formGroup}>
-            <label htmlFor="password" style={styles.label}>
-              Password
-            </label>
-            <div style={styles.inputWrapper}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={styles.inputIcon}>
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                style={styles.input}
-                placeholder="••••••••"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            style={{
-              ...styles.button,
-              ...(isLoading ? styles.buttonDisabled : {}),
-            }}
-          >
-            {isLoading ? (
-              <span style={styles.loadingText}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: 'spin 1s linear infinite' }}>
-                  <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          <form onSubmit={handleSubmit} style={s.form}>
+            <div style={s.field}>
+              <label htmlFor="email" style={s.label}>Email address</label>
+              <div style={s.inputWrap}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" style={s.inputIcon}>
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
                 </svg>
-                Signing in...
-              </span>
-            ) : (
-              'Sign In'
-            )}
-          </button>
-        </form>
+                <input
+                  id="email" type="email" value={email} required
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@company.com"
+                  style={s.input}
+                />
+              </div>
+            </div>
 
-        <div style={styles.footer}>
-          <span style={styles.footerText}>Powered by AI • Secure & Encrypted</span>
+            <div style={s.field}>
+              <label htmlFor="password" style={s.label}>Password</label>
+              <div style={s.inputWrap}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" style={s.inputIcon}>
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input
+                  id="password" type="password" value={password} required
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  style={s.input}
+                />
+              </div>
+            </div>
+
+            <button type="submit" disabled={isLoading} style={{ ...s.btn, ...(isLoading ? s.btnDisabled : {}) }}>
+              {isLoading ? (
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 0.8s linear infinite' }}>
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                  </svg>
+                  Signing in…
+                </span>
+              ) : 'Sign In'}
+            </button>
+          </form>
+
+          <p style={s.footer}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'inline', marginRight: 4 }}>
+              <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Secured with end-to-end encryption
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #4338ca 60%, #6366f1 100%)',
-    position: 'relative',
-    overflow: 'hidden',
+const s: Record<string, React.CSSProperties> = {
+  page: { display: 'flex', minHeight: '100vh', fontFamily: 'Inter, sans-serif' },
+
+  /* Left branding panel */
+  left: {
+    flex: '0 0 45%', position: 'relative', overflow: 'hidden',
+    background: 'linear-gradient(145deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
-  bgOrb1: {
-    position: 'absolute',
-    width: '600px',
-    height: '600px',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%)',
-    top: '-200px',
-    right: '-100px',
-    pointerEvents: 'none',
-  },
-  bgOrb2: {
-    position: 'absolute',
-    width: '400px',
-    height: '400px',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%)',
-    bottom: '-100px',
-    left: '-50px',
-    pointerEvents: 'none',
-  },
-  bgOrb3: {
-    position: 'absolute',
-    width: '300px',
-    height: '300px',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(167, 139, 250, 0.2) 0%, transparent 70%)',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    pointerEvents: 'none',
-  },
-  card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    backdropFilter: 'blur(20px)',
-    padding: '40px 36px 32px',
-    borderRadius: '20px',
-    boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.1)',
-    width: '100%',
-    maxWidth: '420px',
-    margin: '1rem',
-    animation: 'scaleIn 0.4s ease-out',
-    position: 'relative',
-    zIndex: 1,
-  },
-  brandSection: {
-    textAlign: 'center',
-    marginBottom: '32px',
-  },
-  brandIcon: {
-    width: '56px',
-    height: '56px',
-    borderRadius: '16px',
+  leftInner: { position: 'relative', zIndex: 1, padding: '3rem', maxWidth: 400 },
+  logoWrap: {
+    width: 52, height: 52, borderRadius: 14,
     background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '16px',
-    boxShadow: '0 8px 20px rgba(99, 102, 241, 0.35)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    marginBottom: 20, boxShadow: '0 8px 24px rgba(99,102,241,0.45)',
   },
-  title: {
-    fontSize: '1.75rem',
-    fontWeight: 800,
-    color: '#1e1b4b',
-    marginBottom: '6px',
-    letterSpacing: '-0.5px',
+  leftTitle: { fontSize: '2rem', fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.5px', marginBottom: 10 },
+  leftSub: { fontSize: '1rem', color: 'rgba(148,163,184,0.85)', lineHeight: 1.6, marginBottom: 36 },
+  features: { display: 'flex', flexDirection: 'column', gap: 14 },
+  featureItem: { display: 'flex', alignItems: 'center', gap: 12 },
+  featureIcon: { fontSize: '1.1rem', width: 28, textAlign: 'center' as const },
+  featureText: { fontSize: '0.875rem', color: 'rgba(199,210,254,0.8)', fontWeight: 500 },
+  orb1: {
+    position: 'absolute', width: 500, height: 500, borderRadius: '50%',
+    background: 'radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)',
+    top: -150, right: -150, pointerEvents: 'none',
   },
-  subtitle: {
-    color: '#64748b',
-    fontSize: '0.9rem',
-    fontWeight: 400,
+  orb2: {
+    position: 'absolute', width: 350, height: 350, borderRadius: '50%',
+    background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)',
+    bottom: -100, left: -80, pointerEvents: 'none',
   },
-  error: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    backgroundColor: '#fef2f2',
-    color: '#dc2626',
-    padding: '12px 14px',
-    borderRadius: '10px',
-    marginBottom: '20px',
-    fontSize: '0.85rem',
-    border: '1px solid #fecaca',
+
+  /* Right form panel */
+  right: {
+    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: '#f8fafc', padding: '2rem',
   },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
+  formCard: {
+    width: '100%', maxWidth: 400,
+    backgroundColor: '#ffffff',
+    borderRadius: 20, padding: '40px 36px',
+    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.04)',
+    animation: 'slideUp 0.4s ease-out',
   },
-  formGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px',
+  formHeader: { marginBottom: 28 },
+  formTitle: { fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.3px', marginBottom: 4 },
+  formSub: { fontSize: '0.875rem', color: '#64748b' },
+  errorBox: {
+    display: 'flex', alignItems: 'center', gap: 8,
+    backgroundColor: '#fef2f2', color: '#dc2626',
+    padding: '11px 14px', borderRadius: 10, marginBottom: 20,
+    fontSize: '0.83rem', border: '1px solid #fecaca', fontWeight: 500,
   },
-  label: {
-    fontSize: '0.8rem',
-    fontWeight: 600,
-    color: '#374151',
-    letterSpacing: '0.2px',
-  },
-  inputWrapper: {
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  inputIcon: {
-    position: 'absolute',
-    left: '14px',
-    pointerEvents: 'none',
-  },
+  form: { display: 'flex', flexDirection: 'column', gap: 18 },
+  field: { display: 'flex', flexDirection: 'column', gap: 6 },
+  label: { fontSize: '0.78rem', fontWeight: 600, color: '#374151', letterSpacing: '0.1px' },
+  inputWrap: { position: 'relative', display: 'flex', alignItems: 'center' },
+  inputIcon: { position: 'absolute', left: 13, pointerEvents: 'none' },
   input: {
-    width: '100%',
-    padding: '12px 14px 12px 44px',
-    border: '1.5px solid #e2e8f0',
-    borderRadius: '10px',
-    fontSize: '0.95rem',
-    color: '#1e293b',
-    backgroundColor: '#f8fafc',
-    transition: 'all 0.2s',
-    outline: 'none',
-    fontFamily: 'inherit',
+    width: '100%', padding: '11px 13px 11px 40px',
+    border: '1.5px solid #e2e8f0', borderRadius: 10,
+    fontSize: '0.9rem', color: '#1e293b', backgroundColor: '#f8fafc',
+    transition: 'all 0.18s', outline: 'none', fontFamily: 'inherit',
   },
-  button: {
-    padding: '13px',
+  btn: {
+    padding: '12px', marginTop: 4,
     background: 'linear-gradient(135deg, #6366f1, #7c3aed)',
-    color: 'white',
-    border: 'none',
-    borderRadius: '10px',
-    fontSize: '0.95rem',
-    fontWeight: 600,
-    cursor: 'pointer',
-    marginTop: '4px',
-    transition: 'all 0.2s',
-    boxShadow: '0 4px 14px rgba(99, 102, 241, 0.35)',
-    fontFamily: 'inherit',
+    color: 'white', border: 'none', borderRadius: 10,
+    fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer',
+    boxShadow: '0 4px 14px rgba(99,102,241,0.35)', fontFamily: 'inherit',
+    transition: 'all 0.18s',
   },
-  buttonDisabled: {
-    background: '#cbd5e1',
-    cursor: 'not-allowed',
-    boxShadow: 'none',
-  },
-  loadingText: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '8px',
-  },
-  footer: {
-    textAlign: 'center',
-    marginTop: '24px',
-    paddingTop: '20px',
-    borderTop: '1px solid #f1f5f9',
-  },
-  footerText: {
-    fontSize: '0.75rem',
-    color: '#94a3b8',
-    letterSpacing: '0.3px',
-  },
+  btnDisabled: { background: '#cbd5e1', cursor: 'not-allowed', boxShadow: 'none' },
+  footer: { textAlign: 'center' as const, marginTop: 22, fontSize: '0.75rem', color: '#94a3b8' },
 };
